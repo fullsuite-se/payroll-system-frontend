@@ -1,61 +1,83 @@
+import { RocketLaunchIcon } from "@heroicons/react/16/solid";
 import { Link, useLocation } from "react-router-dom";
-
 
 const Sidebar = () => {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
 
-    return (
-        <aside className="w-64 bg-gray-800 text-white h-screen p-4 overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6">Payroll</h2>
-            <nav className="flex flex-col gap-4">
-                <div>
-                    <Link
-                        to="/dashboard"
-                        className={`block hover:text-gray-300
-                            ${isActive("/dashboard") ? "text-yellow-300 font-bold" : ""}
-                        `}
-                    >
-                        Dashboard
-                    </Link>
-                </div>
+    const navItemClasses = (path) =>
+        `flex items-center gap-2 px-2 py-1 rounded-md transition-colors text-sm
+     ${isActive(path)
+            ? "text-teal-600 font-semibold bg-teal-50"
+            : "text-gray-600 hover:text-teal-500 hover:bg-gray-50"
+        }`;
 
-                {/* Payrun group */}
-                <h3 className="text-sm uppercase text-gray-400 mb-2">Users</h3>
-                <div className="flex flex-col gap-2 pl-3">
-                    <Link
-                        to="/payrun"
-                        className={`block hover:text-gray-300
-                            ${isActive("/payrun") ? "text-yellow-300 font-bold" : ""}
-                        `}
-                    >
-                        Payrun
-                    </Link>
-                    <Link
-                        to="/payrun/regular"
-                        className={`block hover:text-gray-300
-                            ${isActive("/payrun/regular") ? "text-yellow-300 font-bold" : ""}
-                        `}
-                    >
-                        Regular Payrun
-                    </Link>
-                    <Link
-                        to="/payrun/last"
-                        className={`block hover:text-gray-300
-                            ${isActive("/payrun/last") ? "text-yellow-300 font-bold" : ""}
-                        `}
-                    >
-                        Last Payrun
-                    </Link>
-                    <Link
-                        to="/payrun/special"
-                        className={`block hover:text-gray-300
-                            ${isActive("/payrun/special") ? "text-yellow-300 font-bold" : ""}
-                        `}
-                    >
-                        Special Payrun
-                    </Link>
-                </div>
+    const sidebarSections = [
+        {
+            title: null,
+            items: [{ label: "Dashboard", path: "/dashboard" }],
+        },
+        {
+            title: "Payrun",
+            items: [
+                { label: "Payrun", path: "/payrun" },
+                { label: "Regular Payrun", path: "/payrun/regular" },
+                { label: "Last Payrun", path: "/payrun/last" },
+                { label: "Special Payrun", path: "/payrun/special" },
+            ],
+        },
+        {
+            title: null,
+            items: [{ label: "Employee", path: "/employee" }],
+        },
+        {
+            title: "Attendance",
+            items: [
+                { label: "Attendance", path: "/attendance" },
+                { label: "Overtime", path: "/attendance/overtime" },
+                { label: "Leave", path: "/attendance/leave" },
+                { label: "Absence", path: "/attendance/absence" },
+                { label: "Restday", path: "/attendance/restday" },
+            ],
+        },
+        {
+            title: null,
+            items: [{ label: "Company", path: "/company" }],
+        },
+    ];
+
+    return (
+        <aside className="w-52 bg-white border-r border-gray-200 h-screen p-4 flex flex-col">
+            <h2 className="text-lg font-bold text-gray-800 mb-6">Payroll</h2>
+
+            <nav className="flex flex-col gap-4 text-sm">
+                {sidebarSections.map((section, idx) => (
+                    <div key={idx}>
+                        {section.title && (
+                            <h3 className="text-[11px] font-semibold text-gray-400 uppercase mb-1 tracking-wide">
+                                {section.title}
+                            </h3>
+                        )}
+
+                        <div
+                            className={`flex flex-col ${section.title ? "pl-4 border-l border-gray-200" : ""
+                                } space-y-1`}
+                        >
+                            {section.items.map((item) => (
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    className={navItemClasses(item.path)}
+                                >
+                                    {isActive(item.path) && (
+                                        <RocketLaunchIcon className="w-3.5 h-3.5 text-teal-600" />
+                                    )}
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </nav>
         </aside>
     );

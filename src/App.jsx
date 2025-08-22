@@ -7,52 +7,42 @@ import RegularPayrunPage from "./pages/main/payrun/Regular/RegularPayrunPage"
 import SpecialPayrunPage from "./pages/main/payrun/Special/SpecialPayrunPage"
 import LastPayrunPage from "./pages/main/payrun/Last/LastPayrunPage"
 import PayrunPage from "./pages/main/payrun/payrun/PayrunPage"
+import AttendancePage from "./pages/main/attendance/attendance/AttendancePage"
+import AbsencePage from "./pages/main/attendance/absence/AbsencePage"
+import LeavePage from "./pages/main/attendance/leave/LeavePage"
+import OvertimePage from "./pages/main/attendance/overtime/OvertimePage"
+import RestdayPage from "./pages/main/attendance/restday/RestdayPage"
+import EmployeePage from "./pages/main/employee/EmployeePage"
+import CompanyPage from "./pages/main/company/CompanyPage"
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<LoginPage />} />
 
-        <Route path="/dashboard" element=
-          {
-            <MainLayout>
-              <DashboardPage />
-            </MainLayout>
-          }
-        />
+        {/* Protected routes with MainLayout */}
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
 
-        <Route path="/payrun" element=
-          {
-            <MainLayout>
-              <PayrunPage />
-            </MainLayout>
-          }
-        />
+          <Route path="/payrun" element={<PayrunPage />} />
+          <Route path="/payrun/regular" element={<RegularPayrunPage />} />
+          <Route path="/payrun/special" element={<SpecialPayrunPage />} />
+          <Route path="/payrun/last" element={<LastPayrunPage />} />
 
-        <Route path="/payrun/regular" element=
-          {
-            <MainLayout>
-              <RegularPayrunPage />
-            </MainLayout>
-          }
-        />
-        <Route path="/payrun/special" element=
-          {
-            <MainLayout>
-              < SpecialPayrunPage />
-            </MainLayout>
-          }
-        />
-        <Route path="/payrun/last" element=
-          {
-            <MainLayout>
-              <LastPayrunPage />
-            </MainLayout>
-          }
-        />
+          <Route path="/employee" element={<EmployeePage />} />
+
+          <Route path="/company" element={<CompanyPage />} />
+
+          <Route path="/attendance" element={<AttendancePage />} />
+          <Route path="/attendance/absence" element={<AbsencePage />} />
+          <Route path="/attendance/leave" element={<LeavePage />} />
+          <Route path="/attendance/overtime" element={<OvertimePage />} />
+          <Route path="/attendance/restday" element={<RestdayPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
