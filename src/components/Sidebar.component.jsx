@@ -1,5 +1,6 @@
 import { RocketLaunchIcon } from "@heroicons/react/16/solid";
 import { Link, useLocation } from "react-router-dom";
+import CompanySelection from "./CompanySelection";
 
 const Sidebar = () => {
     const location = useLocation();
@@ -48,9 +49,9 @@ const Sidebar = () => {
 
     return (
         <aside className="w-52 bg-white border-r border-gray-200 h-screen p-4 flex flex-col">
-            <h2 className="text-lg font-bold text-gray-800 mb-6">Payroll</h2>
-
-            <nav className="flex flex-col gap-4 text-sm">
+            {/* <h2 className="text-lg font-bold text-gray-800 mb-6">Payroll</h2> */}
+            <CompanySelection />
+            <nav className="flex flex-col pt-5 gap-4 text-sm">
                 {sidebarSections.map((section, idx) => (
                     <div key={idx}>
                         {section.title && (
