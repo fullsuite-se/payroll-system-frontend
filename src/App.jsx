@@ -15,37 +15,40 @@ import RestdayPage from "./pages/main/attendance/restday/RestdayPage"
 import EmployeePage from "./pages/main/employee/EmployeePage"
 import CompanyPage from "./pages/main/company/CompanyPage"
 import { UserProvider } from "./contexts/UserProvider"
+import { CompanyProvider } from "./contexts/CompanyProvider"
 
 function App() {
 
   return (
     <BrowserRouter>
       <UserProvider >
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/auth/login" element={<LoginPage />} />
+        <CompanyProvider >
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/auth/login" element={<LoginPage />} />
 
-          {/* Protected routes with MainLayout */}
-          <Route element={<MainLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
+            {/* Protected routes with MainLayout */}
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
 
-            <Route path="/payrun" element={<PayrunPage />} />
-            <Route path="/payrun/regular" element={<RegularPayrunPage />} />
-            <Route path="/payrun/special" element={<SpecialPayrunPage />} />
-            <Route path="/payrun/last" element={<LastPayrunPage />} />
+              <Route path="/payrun" element={<PayrunPage />} />
+              <Route path="/payrun/regular" element={<RegularPayrunPage />} />
+              <Route path="/payrun/special" element={<SpecialPayrunPage />} />
+              <Route path="/payrun/last" element={<LastPayrunPage />} />
 
-            <Route path="/employee" element={<EmployeePage />} />
+              <Route path="/employee" element={<EmployeePage />} />
 
-            <Route path="/company" element={<CompanyPage />} />
+              <Route path="/company" element={<CompanyPage />} />
 
-            <Route path="/attendance" element={<AttendancePage />} />
-            <Route path="/attendance/absence" element={<AbsencePage />} />
-            <Route path="/attendance/leave" element={<LeavePage />} />
-            <Route path="/attendance/overtime" element={<OvertimePage />} />
-            <Route path="/attendance/restday" element={<RestdayPage />} />
-          </Route>
-        </Routes>
+              <Route path="/attendance" element={<AttendancePage />} />
+              <Route path="/attendance/absence" element={<AbsencePage />} />
+              <Route path="/attendance/leave" element={<LeavePage />} />
+              <Route path="/attendance/overtime" element={<OvertimePage />} />
+              <Route path="/attendance/restday" element={<RestdayPage />} />
+            </Route>
+          </Routes>
+        </CompanyProvider>
       </UserProvider>
     </BrowserRouter>
   )
