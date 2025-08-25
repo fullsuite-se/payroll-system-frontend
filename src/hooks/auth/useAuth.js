@@ -21,7 +21,6 @@ const useAuth = () => {
             const response = await loginUser(formData);
 
             const { token } = response.data;
-            console.log('token', token);
 
             localStorage.setItem('token', token);
             navigate('/dashboard');

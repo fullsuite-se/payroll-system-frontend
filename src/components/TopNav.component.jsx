@@ -1,16 +1,13 @@
 import { BellIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useLocation } from "react-router-dom";
 import useTopNav from "../hooks/nav/useTopNav";
+import { useUserContext } from "../contexts/UserProvider";
+import { generateInitials } from "../utility/name.utility";
 
-const TopNav = ({ user = { name: "Jun Jun Zaragosa", position: "Software Engineer" } }) => {
+const TopNav = () => {
+    const { user } = useUserContext();
+
     const { dropdownOpen, setDropdownOpen, handleLogout, paths } = useTopNav();
-
-    // Create initials for avatar
-    const initials = user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase();
 
     const location = useLocation();
     const pathname = location.pathname;
@@ -31,14 +28,22 @@ const TopNav = ({ user = { name: "Jun Jun Zaragosa", position: "Software Enginee
                 {/* User Info & Dropdown */}
                 <div className="relative flex items-center gap-2 cursor-pointer">
                     {/* Avatar */}
-                    <div className="h-9 w-9 rounded-full bg-blue-400 flex items-center justify-center text-white font-semibold">
-                        {initials}
+                    {/* {user.user_pic
+                        ? (
+                            <img className="h-9 w-9 rounded-full bg-blue-400 flex items-center justify-center text-white font-semibold" />
+                        )
+                        : (
+                            <div className="h-9 w-9 rounded-full bg-blue-400 flex items-center justify-center text-white font-semibold">
+                                {generateInitials(user.first_name, user.last_name)}
+                            </div>
+                        )} */}
+                    <div className="h-9 w-9 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold">
+                        {generateInitials(user.first_name, user.last_name)}
                     </div>
-
                     {/* Name & Role */}
                     <div className="hidden sm:block text-right">
-                        <p className="text-sm font-semibold">{user.name}</p>
-                        <p className="text-xs text-gray-500">{user.position}</p>
+                        <p className="text-sm font-semibold">{user.first_name} {user.last_name}</p>
+                        <p className="text-xs text-gray-500">{user.job_title}</p>
                     </div>
 
                     {/* Dropdown Toggle */}
@@ -72,3 +77,4 @@ const TopNav = ({ user = { name: "Jun Jun Zaragosa", position: "Software Enginee
 };
 
 export default TopNav;
+
