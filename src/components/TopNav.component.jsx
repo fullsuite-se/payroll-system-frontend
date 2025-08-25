@@ -17,7 +17,7 @@ const TopNav = ({ user = { name: "Jun Jun Zaragosa", position: "Software Enginee
 
 
     return (
-        <nav className="w-full px-12 pt-6 pb-3 flex justify-between h-[10vh]">
+        <nav className="w-full pl-6 pr-12 pt-6 pb-3 flex justify-between h-[10vh]">
             <div className="font-extrabold ">
                 {paths[pathname]}
             </div>
@@ -43,7 +43,10 @@ const TopNav = ({ user = { name: "Jun Jun Zaragosa", position: "Software Enginee
 
                     {/* Dropdown Toggle */}
                     <button onClick={() => setDropdownOpen(!dropdownOpen)}>
-                        <ChevronDownIcon className="h-4 w-4 text-gray-600" />
+                        <ChevronDownIcon
+                            className={`h-4 w-4 text-gray-600 transform transition-transform duration-300 ${dropdownOpen ? "rotate-180" : "rotate-0"
+                                }`}
+                        />
                     </button>
 
                     {/* Dropdown Menu */}
