@@ -5,12 +5,50 @@ import { useUserContext } from "../contexts/UserProvider";
 import { generateInitials } from "../utility/name.utility";
 
 const TopNav = () => {
-    const { user } = useUserContext();
-
+    const { user, loading } = useUserContext();
     const { dropdownOpen, setDropdownOpen, handleLogout, paths } = useTopNav();
-
     const location = useLocation();
     const pathname = location.pathname;
+
+    if (loading) {
+        return (
+            <nav className="w-full pl-6 pr-12 pt-6 pb-3 flex justify-between h-[10vh]">
+                {/* Left side skeleton (page title) */}
+                <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
+
+                {/* Right side skeleton */}
+                <div className="flex gap-6 items-center">
+                    {/* Notification icon skeleton */}
+                    <div className="h-5 w-5 bg-gray-200 rounded-full animate-pulse"></div>
+
+                    {/* User info skeleton */}
+                    <div className="flex items-center gap-2">
+                        {/* Avatar */}
+                        <div className="h-9 w-9 rounded-full bg-gray-200 animate-pulse"></div>
+
+                        {/* Name & role */}
+                        <div className="hidden sm:block text-right space-y-1">
+                            <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>
+                        </div>
+
+                        {/* Dropdown icon skeleton */}
+                        <div className="h-4 w-4 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                </div>
+            </nav>
+        );
+    }
+
+
+    if (!user) {
+        return (
+            <nav className="w-full pl-6 pr-12 pt-6 pb-3 flex justify-between h-[10vh]">
+                <div>User not found</div>
+            </nav>
+        );
+    }
+
 
 
     return (

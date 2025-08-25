@@ -7,11 +7,7 @@ export const UserProvider = ({ children }) => {
     const user = useUser();
 
     return (
-        <UserContext.Provider
-            value={{
-                ...user
-            }}
-        >
+        <UserContext.Provider value={{ ...user }}>
             {children}
         </UserContext.Provider>
     );
