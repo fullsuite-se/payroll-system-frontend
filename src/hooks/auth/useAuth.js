@@ -2,6 +2,7 @@ import { useState } from "react";
 import { loginUser } from "../../services/auth.service";
 import getErrorMessage from "../../utility/error.utility";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const useAuth = () => {
     const [formData, setFormData] = useState({
@@ -22,6 +23,10 @@ const useAuth = () => {
 
             const { token } = response.data;
 
+            //decode the token
+            const decoded = jwtDecode(token);
+
+            localStorage.setItem("system_user_id", decoded.system_user_id);
             localStorage.setItem('token', token);
             navigate('/dashboard');
         } catch (error) {
