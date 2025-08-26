@@ -39,8 +39,6 @@ const TopNav = () => {
             </nav>
         );
     }
-
-
     if (!user) {
         return (
             <nav className="w-full pl-6 pr-12 pt-6 pb-3 flex justify-between h-[10vh]">
@@ -66,15 +64,6 @@ const TopNav = () => {
                 {/* User Info & Dropdown */}
                 <div className="relative flex items-center gap-2 cursor-pointer">
                     {/* Avatar */}
-                    {/* {user.user_pic
-                        ? (
-                            <img className="h-9 w-9 rounded-full bg-blue-400 flex items-center justify-center text-white font-semibold" />
-                        )
-                        : (
-                            <div className="h-9 w-9 rounded-full bg-blue-400 flex items-center justify-center text-white font-semibold">
-                                {generateInitials(user.first_name, user.last_name)}
-                            </div>
-                        )} */}
                     <div className="h-9 w-9 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold">
                         {generateInitials(user.first_name, user.last_name)}
                     </div>
@@ -101,7 +90,7 @@ const TopNav = () => {
                                 Profile
                             </button>
                             <button
-                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 rounded-t-xl"
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 rounded-t-xl hover:bg-teal-100"
                                 onClick={handleLogout}
                             >
                                 Logout
