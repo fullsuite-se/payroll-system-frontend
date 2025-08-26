@@ -134,6 +134,34 @@ const useCompany = () => {
         [companyFormData, addToast]
     );
 
+    // add user to editors
+    const addEditor = (user) => {
+        if (!companyFormData.editors.some((u) => u.user_id === user.user_id)) {
+            setCompanyFormData({
+                ...companyFormData,
+                editors: [...companyFormData.editors, user],
+            });
+        }
+    };
+
+    // add user to approvers
+    const addApprover = (user) => {
+        if (!companyFormData.approvers.some((u) => u.user_id === user.user_id)) {
+            setCompanyFormData({
+                ...companyFormData,
+                approvers: [...companyFormData.approvers, user],
+            });
+        }
+    };
+
+    // remove user from editors/approvers
+    const removeUser = (type, id) => {
+        setCompanyFormData({
+            ...companyFormData,
+            [type]: companyFormData[type].filter((u) => u.user_id !== id),
+        });
+    };
+
     return {
         dropdownOpen,
         setDropdownOpen,
@@ -150,6 +178,10 @@ const useCompany = () => {
         handleCreateCompany,
         isAddCompanyLoading,
         setIsAddCompanyLoading,
+        addEditor,
+        addApprover,
+        removeUser
+
     };
 };
 

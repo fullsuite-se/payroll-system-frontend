@@ -10,7 +10,10 @@ const CompanyForm = () => {
         setCompanyFormData,
         setIsAddCompanyModalOpen,
         handleCreateCompany,
-        isAddCompanyLoading
+        isAddCompanyLoading,
+        addEditor,
+        addApprover,
+        removeUser
     } = useCompanyContext();
 
     const {
@@ -22,34 +25,6 @@ const CompanyForm = () => {
         setCompanyFormData({
             ...companyFormData,
             [e.target.name]: e.target.value,
-        });
-    };
-
-    // add user to editors
-    const addEditor = (user) => {
-        if (!companyFormData.editors.some((u) => u.user_id === user.user_id)) {
-            setCompanyFormData({
-                ...companyFormData,
-                editors: [...companyFormData.editors, user],
-            });
-        }
-    };
-
-    // add user to approvers
-    const addApprover = (user) => {
-        if (!companyFormData.approvers.some((u) => u.user_id === user.user_id)) {
-            setCompanyFormData({
-                ...companyFormData,
-                approvers: [...companyFormData.approvers, user],
-            });
-        }
-    };
-
-    // remove user from editors/approvers
-    const removeUser = (type, id) => {
-        setCompanyFormData({
-            ...companyFormData,
-            [type]: companyFormData[type].filter((u) => u.user_id !== id),
         });
     };
 
