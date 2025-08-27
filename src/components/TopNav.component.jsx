@@ -68,10 +68,16 @@ const TopNav = () => {
                         {generateInitials(user.first_name, user.last_name)}
                     </div>
                     {/* Name & Role */}
-                    <div className="hidden sm:block text-right">
-                        <p className="text-sm font-semibold">{user.first_name} {user.last_name}</p>
-                        <p className="text-xs text-gray-500">{user.job_title}</p>
+                    {/* Name & Role */}
+                    <div className="hidden sm:block text-right max-w-[150px]">
+                        <p className="text-sm font-semibold truncate">
+                            {user.first_name} {user.last_name}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                            {user.job_title}
+                        </p>
                     </div>
+
 
                     {/* Dropdown Toggle */}
                     <button onClick={() => setDropdownOpen(!dropdownOpen)}>
