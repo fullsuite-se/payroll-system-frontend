@@ -81,6 +81,11 @@ const useCompany = () => {
         setDropdownOpen(false);
     }, []);
 
+    const handleShowAddCompanyModal = () => {
+        setIsAddCompanyModalOpen(true);
+        setDropdownOpen(false);
+    }
+
 
     const handleCreateCompany = useCallback(
         async (e) => {
@@ -180,8 +185,8 @@ const useCompany = () => {
         setIsAddCompanyLoading,
         addEditor,
         addApprover,
-        removeUser
-
+        removeUser,
+        handleShowAddCompanyModal
     };
 };
 

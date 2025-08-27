@@ -11,7 +11,8 @@ const CompanySelection = () => {
         companies,
         changeSelectedCompany,
         isAddCompanyModalOpen,
-        setIsAddCompanyModalOpen
+        setIsAddCompanyModalOpen,
+        handleShowAddCompanyModal
     } = useCompanyContext();
 
     if (loading) return <div>Loading...</div>;
@@ -25,10 +26,7 @@ const CompanySelection = () => {
 
             {/* Create New Button */}
             <button
-                onClick={() => {
-                    setIsAddCompanyModalOpen(true);
-                    setDropdownOpen(false);
-                }}
+                onClick={handleShowAddCompanyModal}
                 className="text-sm font-medium text-teal-700 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl transition"
             >
                 + Create New
@@ -78,10 +76,7 @@ const CompanySelection = () => {
                                     </button>
                                 ))}
                                 <div
-                                    onClick={() => {
-                                        setIsAddCompanyModalOpen(!isAddCompanyModalOpen);
-                                        setDropdownOpen(false);
-                                    }}
+                                    onClick={handleShowAddCompanyModal}
                                     className="flex justify-center pt-5">
                                     <button className="text-sm text-teal-600 font-semibold hover:cursor-pointer">+ Create New</button>
                                 </div>
