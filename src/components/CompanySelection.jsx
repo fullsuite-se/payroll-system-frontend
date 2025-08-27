@@ -15,7 +15,28 @@ const CompanySelection = () => {
     } = useCompanyContext();
 
     if (loading) return <div>Loading...</div>;
-    if (!company) return <nav className="p-4">Company not found</nav>;
+
+    if (!company) return (
+        <div className="flex items-center gap-3 p-2">
+            {/* Placeholder Avatar */}
+            <div className="h-9 w-9 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold">
+                N/A
+            </div>
+
+            {/* Create New Button */}
+            <button
+                onClick={() => {
+                    setIsAddCompanyModalOpen(true);
+                    setDropdownOpen(false);
+                }}
+                className="text-sm font-medium text-teal-700 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl transition"
+            >
+                + Create New
+            </button>
+            {isAddCompanyModalOpen && (<AddCompanyModal />)}
+        </div>
+    );
+
 
     return (
         <>
