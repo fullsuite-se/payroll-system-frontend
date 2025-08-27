@@ -18,9 +18,9 @@ import { UserProvider } from "./contexts/UserProvider"
 import { CompanyProvider } from "./contexts/CompanyProvider"
 import { ToastProvider } from "./contexts/ToastProvider"
 import ProtectedRoute from "./routes/ProtectedRoute"
+import PublicRoute from "./routes/PublicRoute"
 
 function App() {
-
   return (
     <BrowserRouter>
       <ToastProvider>
@@ -29,7 +29,10 @@ function App() {
             <Routes>
               {/* Public routes */}
               <Route path="/" element={<HomePage />} />
-              <Route path="/auth/login" element={<LoginPage />} />
+              {/* Navitate to Dasboard if there's token */}
+              <Route element={<PublicRoute />}>
+                <Route path="/auth/login" element={<LoginPage />} />
+              </Route>
 
               {/* Protected routes with MainLayout */}
               <Route element={<MainLayout />}>
