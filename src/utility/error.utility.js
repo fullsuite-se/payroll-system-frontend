@@ -35,5 +35,11 @@ const getErrorMessage = (error, fallback = "Something went wrong") => {
     }
 }
 
+export const getResponseErrorMessage = (error, falback = "Something went wrong") => {
+    if (!error) return falback;
+
+    return error.response.data.error;
+}
+
 
 export default getErrorMessage;
