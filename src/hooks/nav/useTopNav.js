@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const useTopNav = () => {
-    const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleLogout = () => {
         console.log("Logging out...");
         localStorage.removeItem("token");
-        navigate("/");
+        localStorage.removeItem("system_user_id");
+        window.location.href = "/";
     };
 
     const paths = {

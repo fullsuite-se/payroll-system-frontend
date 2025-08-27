@@ -8,6 +8,9 @@ const CompanyContext = createContext();
 export const CompanyProvider = ({ children }) => {
     const company = useCompany();
 
+    //wait for loading to finish before rendering children
+    if (company.loading) return null;
+
     return (
         <CompanyContext.Provider value={{ ...company }}>
             {children}

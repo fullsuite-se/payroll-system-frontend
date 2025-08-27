@@ -8,6 +8,9 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const user = useUser();
 
+    //wait for loading to finish before rendering children
+    if (user.loading) return null;
+
     return (
         <UserContext.Provider value={{ ...user }}>
             {children}
