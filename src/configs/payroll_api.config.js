@@ -2,7 +2,7 @@ import axios from "axios";
 import env from "./env.config";
 
 const payroll_api = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: env.VITE_PAYROLL_BACKEND_URL,
     withCredentials: false,
 });
 
@@ -13,5 +13,4 @@ payroll_api.interceptors.request.use((config) => {
     }
     return config;
 });
-
 export default payroll_api;
