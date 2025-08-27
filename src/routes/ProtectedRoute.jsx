@@ -1,8 +1,15 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { getToken, isTokenExpired, removeLocalVariables } from "../utility/auth.utility";
 
 const ProtectedRoute = () => {
-    const token = localStorage.getItem("token");
-    return token ? <Outlet /> : <Navigate to="/auth/login" replace />
-}
+    const token = getToken();
+
+    if (!token || isTokenExpired(token)) {
+        removeLocalVariables();
+        return <Navigate to="/auth/login" replace />;
+    }
+
+    return <Outlet />; // safe to render protected content
+};
 
 export default ProtectedRoute;

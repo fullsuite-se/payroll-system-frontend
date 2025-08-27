@@ -18,6 +18,9 @@ const useAuth = () => {
     const handleLogin = async () => {
         setIsLoading(true);
         try {
+            console.log('base url of hris: ', import.meta.env.VITE_PAYROLL_BACKEND_URL);
+
+
             const response = await loginUser(formData);
             const { token } = response.data;
             //decode the token
