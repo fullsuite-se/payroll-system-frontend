@@ -17,7 +17,7 @@ const CompanyForm = () => {
     } = useCompanyContext();
 
     const {
-        users, isUsersLoading
+        users, user, isUsersLoading
     } = useUserContext();
 
 
@@ -118,11 +118,13 @@ const CompanyForm = () => {
                             }}
                         >
                             <option value="">-- Select Editor --</option>
-                            {users.map((u) => (
-                                <option key={u.user_id} value={u.user_id}>
+                            {users.map((u) => {
+                                if (u.user_id == user.user_id) return;
+
+                                return (<option key={u.user_id} value={u.user_id}>
                                     {u.first_name} {u.last_name}
-                                </option>
-                            ))}
+                                </option>)
+                            })}
                         </select>
                         <ChevronDownIcon className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
@@ -169,11 +171,13 @@ const CompanyForm = () => {
                             }}
                         >
                             <option value="">-- Select Approver --</option>
-                            {users.map((u) => (
-                                <option key={u.user_id} value={u.user_id}>
+                            {users.map((u) => {
+                                if (u.user_id == user.user_id) return;
+
+                                return (<option key={u.user_id} value={u.user_id}>
                                     {u.first_name} {u.last_name}
-                                </option>
-                            ))}
+                                </option>)
+                            })}
                         </select>
                         <ChevronDownIcon className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
