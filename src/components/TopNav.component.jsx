@@ -1,6 +1,6 @@
 import { BellIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useLocation } from "react-router-dom";
-import useTopNav from "../hooks/nav/useTopNav";
+import useTopNav from "../hooks/useTopNav";
 import { useUserContext } from "../contexts/UserProvider";
 import { generateInitials } from "../utility/name.utility";
 

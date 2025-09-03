@@ -1,5 +1,5 @@
 import Input from "../../components/Input.component";
-import useAuth from "../../hooks/auth/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {

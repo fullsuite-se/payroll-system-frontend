@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { loginUser } from "../../services/auth.service";
-import getErrorMessage, { getResponseErrorMessage } from "../../utility/error.utility";
+import { loginUser } from "../services/auth.service";
+import getErrorMessage, { getResponseErrorMessage } from "../utility/error.utility";
 import { jwtDecode } from "jwt-decode";
-import { useToastContext } from "../../contexts/ToastProvider";
+import { useToastContext } from "../contexts/ToastProvider";
 
 const useAuth = () => {
     const [formData, setFormData] = useState({

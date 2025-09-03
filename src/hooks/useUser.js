@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPayrollUsers, getUser } from "../../services/user.service";
+import { getPayrollUsers, getUser } from "../services/user.service";
 
 const useUser = () => {
     const [users, setUsers] = useState([]); //this is the users of payroll - defined in hris backend. 

@@ -3,8 +3,8 @@ import {
     createCompany,
     createUserToManageCompany,
     getCompaniesService,
-} from "../../services/company.service";
-import { useToastContext } from "../../contexts/ToastProvider";
+} from "../services/company.service";
+import { useToastContext } from "../contexts/ToastProvider";
 
 const initialFormData = {
     company_id: "",
