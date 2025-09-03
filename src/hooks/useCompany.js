@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import {
     createCompany,
+    createCompanyPayrollFrequency,
+    createCompanyWorkingDays,
     createUserToManageCompany,
     getCompaniesService,
 } from "../services/company.service";
@@ -113,7 +115,12 @@ const useCompany = () => {
                 userIds = `${userIds},${localStorage.getItem("system_user_id")}`;
                 await createUserToManageCompany(userIds, companyFormData.company_id);
 
-                // 3. Construct new company
+                // 3. Add default company configurations
+                await createCompanyPayrollFrequency(companyFormData.company_id, 2);
+
+                await createCompanyWorkingDays(companyFormData.company_id, 22);
+
+                // 4. Construct new company
                 const newCompany = {
                     company_id: companyFormData.company_id,
                     company_name: companyFormData.company_name,
