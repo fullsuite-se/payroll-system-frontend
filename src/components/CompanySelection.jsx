@@ -1,6 +1,7 @@
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { ChevronDownIcon, InformationCircleIcon } from "@heroicons/react/16/solid";
 import { useCompanyContext } from "../contexts/CompanyProvider";
 import AddCompanyModal from "./AddCompanyModal";
+import EditCompanyModal from "./EditCompanyModal";
 
 const CompanySelection = () => {
     const {
@@ -12,7 +13,10 @@ const CompanySelection = () => {
         changeSelectedCompany,
         isAddCompanyModalOpen,
         setIsAddCompanyModalOpen,
-        handleShowAddCompanyModal
+        handleShowAddCompanyModal,
+        setIsEditCompanyModalOpen,
+        isEditCompanyModalOpen,
+
     } = useCompanyContext();
 
     if (loading) return <div>Loading...</div>;
@@ -40,7 +44,21 @@ const CompanySelection = () => {
         <>
             <div className="flex items-center justify-between w-full py-2 gap-1 relative">
                 {/* Logo */}
-                <img src={company.company_logo} className="h-9 w-9 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold" />
+                <div className="relative flex-shrink-0">
+                    <img
+                        src={company.company_logo}
+                        alt="Company Logo"
+                        className="h-9 w-9 rounded-full bg-teal-600 object-cover"
+                    />
+
+                    {/* Info icon */}
+                    <InformationCircleIcon
+                        onClick={() => setIsEditCompanyModalOpen(!isEditCompanyModalOpen)}
+                        className="absolute -top-1 -right-1 h-4 w-4 text-gray-500 bg-white rounded-full shadow-sm hover:cursor-pointer"
+                    />
+                </div>
+
+
                 {/*Info */}
                 <div className="flex items-center gap-3">
                     <div>
@@ -86,6 +104,7 @@ const CompanySelection = () => {
                 </div>
             </div>
             {isAddCompanyModalOpen && (<AddCompanyModal />)}
+            {isEditCompanyModalOpen && (<EditCompanyModal />)}
         </>
     );
 };

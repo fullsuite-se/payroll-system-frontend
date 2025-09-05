@@ -20,3 +20,11 @@ export const createCompanyPayrollFrequency = async (company_id, frequency) => {
 export const createCompanyWorkingDays = async (company_id, number_of_days) => {
     return await payroll_api.post(`/api/v1/companies/${company_id}/configuration/working-days`, { number_of_days });
 }
+
+export const updateCompany = async (company_id, formData) => {
+    return await payroll_api.patch(`/api/v1/companies/${company_id}`, formData);
+};
+
+export const updateCompanyInfo = async (company_id, formData) => {
+    return await payroll_api.patch(`/api/v1/companies/${company_id}/info`, formData);
+};

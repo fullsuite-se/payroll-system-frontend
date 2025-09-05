@@ -5,6 +5,8 @@ import {
     createCompanyWorkingDays,
     createUserToManageCompany,
     getCompaniesService,
+    updateCompany,
+    updateCompanyInfo,
 } from "../services/company.service";
 import { useToastContext } from "../contexts/ToastProvider";
 
@@ -38,7 +40,12 @@ const useCompany = () => {
     const [isAddCompanyModalOpen, setIsAddCompanyModalOpen] = useState(false);
     const [isAddCompanyLoading, setIsAddCompanyLoading] = useState(false);
     const [companyFormData, setCompanyFormData] = useState(initialFormData);
-
+    const [companyUpdateFormData, setCompanyUpdateFormData] = useState(initialFormData);
+    const [isEditCompanyModalOpen, setIsEditCompanyModalOpen] = useState(false);
+    const [isEditCompany, setIsEditCompany] = useState(false);
+    const [isEditCompanyInfo, setIsEditCompanyInfo] = useState(false);
+    const [isEditCompanyLoading, setIsEditCompanyLoading] = useState(false);
+    const [isEditCompanyInfoLoading, setIsEditCompanyInfoLoading] = useState(false);
     const { addToast } = useToastContext();
 
     useEffect(() => {
@@ -65,6 +72,8 @@ const useCompany = () => {
                 }
 
                 setCompany(selected ?? null);
+                console.log('selected', selected);
+
             } catch (error) {
                 console.error("Failed to fetch companies:", error);
                 setCompanies([]);
@@ -76,6 +85,23 @@ const useCompany = () => {
 
         fetchCompanies();
     }, []);
+
+    useEffect(() => {
+        if (company) {
+            setCompanyUpdateFormData({
+                company_id: company.company_id,
+                company_name: company.company_name,
+                company_trade_name: company.company_trade_name,
+                company_email: company.company_email,
+                company_logo: company.company_logo,
+
+                company_address: company.company_address,
+                company_phone: company.company_phone,
+                company_tin: company.company_tin,
+                business_type: company.business_type,
+            });
+        }
+    }, [company]);
 
     const changeSelectedCompany = useCallback((selected) => {
         setCompany(selected);
@@ -174,6 +200,44 @@ const useCompany = () => {
         });
     };
 
+    //update company
+    const handleUpdateCompany = () => {
+        setIsEditCompanyLoading(true);
+        try {
+            const updatedCompany = updateCompany(company.company_id, companyUpdateFormData);
+            console.log(updatedCompany);
+            //set the company to the value of the form.
+            setCompany(companyUpdateFormData);
+            addToast("Company updated successfully", "success");
+        } catch (error) {
+            console.error("Failed to update company:", error);
+            addToast("Failed to update company", "error");
+        }
+        finally {
+            setIsEditCompanyLoading(false);
+            setIsEditCompany(false);
+        }
+    }
+
+    //update companyInfo
+    const handleUpdateCompanyInfo = () => {
+        setIsEditCompanyInfoLoading(true);
+        try {
+            const updatedCompanyInfo = updateCompanyInfo(company.company_id, companyUpdateFormData);
+            console.log(updatedCompanyInfo);
+            //set the company to the value of the form.
+            setCompany(companyUpdateFormData);
+            addToast("Company updated successfully", "success");
+        } catch (error) {
+            console.error("Failed to update company info:", error);
+            addToast("Failed to update company", "error");
+        }
+        finally {
+            setIsEditCompanyInfoLoading(false);
+            setIsEditCompanyInfo(false);
+        }
+    }
+
     return {
         dropdownOpen,
         setDropdownOpen,
@@ -193,7 +257,15 @@ const useCompany = () => {
         addEditor,
         addApprover,
         removeUser,
-        handleShowAddCompanyModal
+        handleShowAddCompanyModal,
+        companyUpdateFormData, setCompanyUpdateFormData,
+        handleUpdateCompany,
+        handleUpdateCompanyInfo,
+        isEditCompany, setIsEditCompany,
+        isEditCompanyInfo, setIsEditCompanyInfo,
+        isEditCompanyInfoLoading, setIsEditCompanyInfoLoading,
+        isEditCompanyLoading, setIsEditCompanyLoading,
+        isEditCompanyModalOpen, setIsEditCompanyModalOpen
     };
 };
 
