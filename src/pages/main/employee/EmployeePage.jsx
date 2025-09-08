@@ -1,47 +1,35 @@
-
-
-// const EmployeePage = () => {
-//     return (
-//         <div>
-//             this is employee page
-//         </div>
-//     );
-// }
-
 // export default EmployeePage;
-
-import React from "react";
+import Search from "../../../components/Search";
+import { useEmployeeContext } from "../../../contexts/EmployeeProvider";
+import EmployeeCard from "./EmployeeCard";
+import EmployeeTable from "./EmployeeTable";
 
 const EmployeePage = () => {
-    const employees = [
-        { id: 1, name: "Alice Johnson", role: "Software Engineer", department: "Engineering" },
-        { id: 2, name: "Bob Smith", role: "Product Manager", department: "Product" },
-        { id: 3, name: "Charlie Brown", role: "Designer", department: "Design" },
-        { id: 4, name: "Diana Lee", role: "HR Specialist", department: "HR" },
-    ];
+    const { query, setQuery, employee, setEmployee } = useEmployeeContext();
 
     return (
-        <div className="p-6">
-            <table className="w-full border-collapse text-sm">
-                <thead>
-                    <tr className="border-b">
-                        <th className="text-left py-2 px-3">ID</th>
-                        <th className="text-left py-2 px-3">Name</th>
-                        <th className="text-left py-2 px-3">Role</th>
-                        <th className="text-left py-2 px-3">Department</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {employees.map((emp) => (
-                        <tr key={emp.id} className="border-b hover:bg-gray-50">
-                            <td className="py-2 px-3">{emp.id}</td>
-                            <td className="py-2 px-3">{emp.name}</td>
-                            <td className="py-2 px-3">{emp.role}</td>
-                            <td className="py-2 px-3">{emp.department}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div>
+            <div className="flex justify-between pb-4">
+                <Search query={query} setQuery={setQuery} />
+                <button className="bg-teal-600 text-sm px-3 py-1 text-white rounded-2xl cursor-pointer">
+                    Add +
+                </button>
+            </div>
+
+            <div className="flex gap-4">
+                {/* Table container - adjusts width based on whether card is open */}
+                <div className={`transition-all duration-300 ${employee ? 'w-2/3' : 'w-full'
+                    }`}>
+                    <EmployeeTable isCardOpen={!!employee} />
+                </div>
+
+                {/* Employee Card - slides in from right when opened */}
+                {employee && (
+                    <div className="w-1/3 min-w-[350px]">
+                        <EmployeeCard employee={employee} setEmployee={setEmployee} />
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

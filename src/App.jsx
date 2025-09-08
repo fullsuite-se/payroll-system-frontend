@@ -19,6 +19,7 @@ import { CompanyProvider } from "./contexts/CompanyProvider"
 import { ToastProvider } from "./contexts/ToastProvider"
 import ProtectedRoute from "./routes/ProtectedRoute"
 import PublicRoute from "./routes/PublicRoute"
+import { EmployeeProvider } from "./contexts/EmployeeProvider"
 
 function App() {
   return (
@@ -26,36 +27,38 @@ function App() {
       <ToastProvider>
         <UserProvider >
           <CompanyProvider >
-            <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<HomePage />} />
-              {/* Navitate to Dasboard if there's token */}
-              <Route element={<PublicRoute />}>
-                <Route path="/auth/login" element={<LoginPage />} />
-              </Route>
-
-              {/* Protected routes with MainLayout */}
-              <Route element={<MainLayout />}>
-                <Route element={<ProtectedRoute />} >
-                  <Route path="/dashboard" element={<DashboardPage />} />
-
-                  <Route path="/payrun" element={<PayrunPage />} />
-                  <Route path="/payrun/regular" element={<RegularPayrunPage />} />
-                  <Route path="/payrun/special" element={<SpecialPayrunPage />} />
-                  <Route path="/payrun/last" element={<LastPayrunPage />} />
-
-                  <Route path="/employee" element={<EmployeePage />} />
-
-                  <Route path="/company" element={<CompanyPage />} />
-
-                  <Route path="/attendance" element={<AttendancePage />} />
-                  <Route path="/attendance/absence" element={<AbsencePage />} />
-                  <Route path="/attendance/leave" element={<LeavePage />} />
-                  <Route path="/attendance/overtime" element={<OvertimePage />} />
-                  <Route path="/attendance/restday" element={<RestdayPage />} />
+            <EmployeeProvider>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<HomePage />} />
+                {/* Navitate to Dasboard if there's token */}
+                <Route element={<PublicRoute />}>
+                  <Route path="/auth/login" element={<LoginPage />} />
                 </Route>
-              </Route>
-            </Routes>
+
+                {/* Protected routes with MainLayout */}
+                <Route element={<MainLayout />}>
+                  <Route element={<ProtectedRoute />} >
+                    <Route path="/dashboard" element={<DashboardPage />} />
+
+                    <Route path="/payrun" element={<PayrunPage />} />
+                    <Route path="/payrun/regular" element={<RegularPayrunPage />} />
+                    <Route path="/payrun/special" element={<SpecialPayrunPage />} />
+                    <Route path="/payrun/last" element={<LastPayrunPage />} />
+
+                    <Route path="/employee" element={<EmployeePage />} />
+
+                    <Route path="/company" element={<CompanyPage />} />
+
+                    <Route path="/attendance" element={<AttendancePage />} />
+                    <Route path="/attendance/absence" element={<AbsencePage />} />
+                    <Route path="/attendance/leave" element={<LeavePage />} />
+                    <Route path="/attendance/overtime" element={<OvertimePage />} />
+                    <Route path="/attendance/restday" element={<RestdayPage />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </EmployeeProvider>
           </CompanyProvider>
         </UserProvider>
       </ToastProvider>
