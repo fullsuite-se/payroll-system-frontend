@@ -72,15 +72,17 @@ const AddEmployeeForm = () => {
                                     placeholder="First name"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     required
+                                    maxLength={100}
                                 />
 
                                 {/* Middle Name */}
                                 <input
                                     type="text"
-                                    value={employee.middle_name}
+                                    value={employee.middle_name || ''}
                                     onChange={(e) => handleFieldChange(employee.id, 'middle_name', e.target.value)}
                                     placeholder="Middle name"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    maxLength={100}
                                 />
 
                                 {/* Last Name */}
@@ -91,6 +93,7 @@ const AddEmployeeForm = () => {
                                     placeholder="Last name"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     required
+                                    maxLength={100}
                                 />
 
                                 {/* Personal Email */}
@@ -100,6 +103,7 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'personal_email', e.target.value)}
                                     placeholder="personal@email.com"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    maxLength={100}
                                 />
 
                                 {/* Work Email */}
@@ -109,6 +113,7 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'work_email', e.target.value)}
                                     placeholder="work@company.com"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    maxLength={100}
                                 />
 
                                 {/* Job Title */}
@@ -118,6 +123,7 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'job_title', e.target.value)}
                                     placeholder="Job title"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    maxLength={100}
                                 />
 
                                 {/* Department */}
@@ -127,15 +133,15 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'department', e.target.value)}
                                     placeholder="Department"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    maxLength={100}
                                 />
 
                                 {/* Employment Status - Dropdown */}
                                 <select
-                                    value={employee.employment_status}
-                                    onChange={(e) => handleFieldChange(employee.id, 'employment_status', e.target.value)}
+                                    value={employee.employement_status ? 'active' : 'inactive'}
+                                    onChange={(e) => handleFieldChange(employee.id, 'employement_status', e.target.value === 'active')}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                                 >
-                                    <option value="">Select Status</option>
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
                                 </select>
@@ -171,23 +177,19 @@ const AddEmployeeForm = () => {
                                     <option value="widowed">Widowed</option>
                                 </select>
 
-                                {/* Date Hired - MM/DD/YY */}
+                                {/* Date Hired - Date input */}
                                 <input
-                                    type="text"
+                                    type="date"
                                     value={employee.date_hired}
                                     onChange={(e) => handleFieldChange(employee.id, 'date_hired', e.target.value)}
-                                    placeholder="MM/DD/YY"
-                                    pattern="\d{2}/\d{2}/\d{2}"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
-                                {/* Date End - MM/DD/YY */}
+                                {/* Date End - Date input */}
                                 <input
-                                    type="text"
-                                    value={employee.date_end}
-                                    onChange={(e) => handleFieldChange(employee.id, 'date_end', e.target.value)}
-                                    placeholder="MM/DD/YY"
-                                    pattern="\d{2}/\d{2}/\d{2}"
+                                    type="date"
+                                    value={employee.date_end || ''}
+                                    onChange={(e) => handleFieldChange(employee.id, 'date_end', e.target.value || null)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
@@ -205,21 +207,19 @@ const AddEmployeeForm = () => {
                                 {/* Base Pay */}
                                 <input
                                     type="number"
-                                    value={employee.base_pay}
-                                    onChange={(e) => handleFieldChange(employee.id, 'base_pay', e.target.value)}
+                                    value={employee.base_pay || ''}
+                                    onChange={(e) => handleFieldChange(employee.id, 'base_pay', e.target.value ? Number(e.target.value) : null)}
                                     placeholder="0.00"
                                     step="0.01"
                                     min="0"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
-                                {/* Base Pay Start Date - MM/DD/YY */}
+                                {/* Base Pay Start Date - Date input */}
                                 <input
-                                    type="text"
-                                    value={employee.date}
-                                    onChange={(e) => handleFieldChange(employee.id, 'date', e.target.value)}
-                                    placeholder="MM/DD/YY"
-                                    pattern="\d{2}/\d{2}/\d{2}"
+                                    type="date"
+                                    value={employee.date || ''}
+                                    onChange={(e) => handleFieldChange(employee.id, 'date', e.target.value || null)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
@@ -230,9 +230,9 @@ const AddEmployeeForm = () => {
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                                 >
                                     <option value="">Select Type</option>
-                                    <option value="starting">Starting</option>
-                                    <option value="increase">Increase</option>
-                                    <option value="correction">Correction</option>
+                                    <option value="STARTING">Starting</option>
+                                    <option value="INCREASE">Increase</option>
+                                    <option value="CORRECTION">Correction</option>
                                 </select>
 
                                 {/* Remove Button */}
