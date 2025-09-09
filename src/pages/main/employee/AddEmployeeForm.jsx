@@ -28,20 +28,20 @@ const AddEmployeeForm = () => {
                         <div>First Name *</div>
                         <div>Middle Name</div>
                         <div>Last Name *</div>
-                        <div>Personal Email</div>
-                        <div>Work Email</div>
-                        <div>Job Title</div>
-                        <div>Department</div>
-                        <div>Employment Status</div>
-                        <div>Permanent Address</div>
-                        <div>Current Address</div>
-                        <div>Civil Status</div>
-                        <div>Date Hired</div>
+                        <div>Personal Email *</div>
+                        <div>Work Email *</div>
+                        <div>Job Title *</div>
+                        <div>Department *</div>
+                        <div>Employment Status *</div>
+                        <div>Permanent Address *</div>
+                        <div>Current Address *</div>
+                        <div>Civil Status *</div>
+                        <div>Date Hired *</div>
                         <div>Date End</div>
-                        <div>Sex</div>
-                        <div>Base Pay</div>
-                        <div>Base Pay Start Date</div>
-                        <div>Change Type</div>
+                        <div>Sex *</div>
+                        <div>Base Pay *</div>
+                        <div>Base Pay Start Date *</div>
+                        <div>Change Type *</div>
                         <div></div>
                     </div>
 
@@ -104,6 +104,7 @@ const AddEmployeeForm = () => {
                                     placeholder="personal@email.com"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     maxLength={100}
+                                    required
                                 />
 
                                 {/* Work Email */}
@@ -114,6 +115,7 @@ const AddEmployeeForm = () => {
                                     placeholder="work@company.com"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     maxLength={100}
+                                    required
                                 />
 
                                 {/* Job Title */}
@@ -124,6 +126,7 @@ const AddEmployeeForm = () => {
                                     placeholder="Job title"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     maxLength={100}
+                                    required
                                 />
 
                                 {/* Department */}
@@ -134,6 +137,7 @@ const AddEmployeeForm = () => {
                                     placeholder="Department"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     maxLength={100}
+                                    required
                                 />
 
                                 {/* Employment Status - Dropdown */}
@@ -153,6 +157,7 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'permanent_address', e.target.value)}
                                     placeholder="Permanent Address"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
                                 />
 
                                 {/* Current Address */}
@@ -162,6 +167,7 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'current_address', e.target.value)}
                                     placeholder="Current Address"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
                                 />
 
                                 {/* Civil Status - Dropdown */}
@@ -183,6 +189,7 @@ const AddEmployeeForm = () => {
                                     value={employee.date_hired}
                                     onChange={(e) => handleFieldChange(employee.id, 'date_hired', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
                                 />
 
                                 {/* Date End - Date input */}
@@ -213,6 +220,7 @@ const AddEmployeeForm = () => {
                                     step="0.01"
                                     min="0"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
                                 />
 
                                 {/* Base Pay Start Date - Date input */}
@@ -221,6 +229,7 @@ const AddEmployeeForm = () => {
                                     value={employee.date || ''}
                                     onChange={(e) => handleFieldChange(employee.id, 'date', e.target.value || null)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
                                 />
 
                                 {/* Change Type - Dropdown */}
