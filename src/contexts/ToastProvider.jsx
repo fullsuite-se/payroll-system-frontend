@@ -1,4 +1,10 @@
 import { createContext, useContext, useState, useCallback } from "react";
+import {
+    XCircleIcon,
+    CheckCircleIcon,
+    ExclamationTriangleIcon,
+    InformationCircleIcon,
+} from "@heroicons/react/24/solid";
 
 const ToastContext = createContext();
 
@@ -9,31 +15,31 @@ export const ToastProvider = ({ children }) => {
         const id = Date.now();
         setToasts((prev) => [...prev, { id, message, type, visible: true }]);
 
-        // Auto-hide after 3s with fade-out
+        // Auto-hide with fade-out
         setTimeout(() => {
             setToasts((prev) =>
                 prev.map((t) => (t.id === id ? { ...t, visible: false } : t))
             );
         }, 2500);
 
-        // Remove from DOM after fade-out ends
+        // Remove from DOM after fade-out
         setTimeout(() => {
             setToasts((prev) => prev.filter((t) => t.id !== id));
         }, 3000);
     }, []);
 
-    const getToastStyle = (type) => {
+    const getToastIcon = (type) => {
         switch (type) {
             case "error":
-                return "bg-red-500/90 text-white";
+                return <XCircleIcon className="h-5 w-5 text-red-500" />;
             case "warning":
-                return "bg-orange-500/90 text-white";
+                return <ExclamationTriangleIcon className="h-5 w-5 text-orange-500" />;
             case "success":
-                return "bg-green-500/90 text-white";
+                return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
             default:
-                return "bg-gray-500/90 text-white";
-        };
-    }
+                return <InformationCircleIcon className="h-5 w-5 text-gray-500" />;
+        }
+    };
 
     return (
         <ToastContext.Provider value={{ addToast }}>
@@ -44,13 +50,14 @@ export const ToastProvider = ({ children }) => {
                 {toasts.map((toast) => (
                     <div
                         key={toast.id}
-                        className={`px-4 py-2 rounded-2xl shadow-lg text-sm font-medium 
-                            transition-all duration-500 ease-in-out
-                        ${toast.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}
-                        ${getToastStyle(toast.type)}
-                        `}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-2xl 
+              shadow-lg text-sm font-medium backdrop-blur-md 
+              bg-gray-100/80 border border-gray-200 
+              transition-all duration-500 ease-in-out
+              ${toast.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
                     >
-                        {toast.message}
+                        {getToastIcon(toast.type)}
+                        <span className="text-gray-800">{toast.message}</span>
                     </div>
                 ))}
             </div>
