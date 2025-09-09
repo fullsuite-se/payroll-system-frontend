@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCompanyContext } from "../contexts/CompanyProvider";
-import { createEmployee, fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery } from "../services/employee.service";
+import { addEmployeeSalary, createEmployee, fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery } from "../services/employee.service";
 import { useToastContext } from "../contexts/ToastProvider";
 import useDebounce from "./useDebounce";
 import * as XLSX from 'xlsx';
@@ -27,6 +27,8 @@ const formData = {
     is_active: true,
 };
 
+
+
 const useEmployee = () => {
     const { company } = useCompanyContext();
     const [employees, setEmployees] = useState([]);
@@ -36,6 +38,8 @@ const useEmployee = () => {
     const [query, setQuery] = useState("");
     const [showAddModal, setShowAddModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [showAddSalaryForm, setShowAddSalaryForm] = useState(false);
+    const [isAddSalaryLoading, setIsAddSalaryLoading] = useState(false);
 
     const { addToast } = useToastContext();
     const debouncedQuery = useDebounce(query, 800);
@@ -44,6 +48,8 @@ const useEmployee = () => {
     const [employeesFormData, setEmployeesFormData] = useState([
         { ...formData, id: Date.now() } // Add unique id for each row
     ]);
+
+    const [salaryFormData, setSalaryFormData] = useState({ ...formData });
 
     useEffect(() => {
         let ignore = false;
@@ -333,6 +339,48 @@ const useEmployee = () => {
         }
     };
 
+    const handleResetEmployeeSalaryForm = () => {
+        setSalaryFormData({ ...formData });
+    }
+
+
+
+    const handleAddSalary = async () => {
+        setIsAddSalaryLoading(true);
+        setSalaryFormData({ ...salaryFormData, employee_id: employee.employee_id });
+
+        const payload = {
+            ...salaryFormData,
+            employee_id: employee.employee_id,
+            company_id: company.company_id,
+            base_pay: Number(salaryFormData.base_pay),
+        }
+
+        try {
+            await addEmployeeSalary(company.company_id, employee.employee_id, payload);
+            addToast("New salary added", "success");
+
+            //trigger fetch of employeeInfo
+            await handleFetchEmployeeInfo(employee.employee_id);
+
+            //reset form
+            handleResetEmployeeSalaryForm();
+
+            //close form
+            setShowAddSalaryForm(false);
+        } catch (error) {
+            console.log(error);
+            addToast("Failed to add new salary", "error");
+        }
+        finally {
+            setIsAddSalaryLoading(false);
+        }
+        return;
+    }
+
+
+
+
     return {
         employees, setEmployees,
         employee, setEmployee,
@@ -352,6 +400,12 @@ const useEmployee = () => {
         handleResetForm,
         handleAddEmployees,
         uploadEmployeeFile,
+
+        //salary
+        showAddSalaryForm, setShowAddSalaryForm,
+        salaryFormData, setSalaryFormData,
+        handleAddSalary,
+        isAddSalaryLoading, setIsAddSalaryLoading,
     };
 };
 

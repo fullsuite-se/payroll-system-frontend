@@ -29,3 +29,7 @@ export const updateEmployee = async (employee_id, formData) => {
 export const updateEmployeeInfo = async (employee_id, formData) => {
     return await payroll_api.patch(`/api/v1/employees/${employee_id}/info`, formData);
 };
+
+export const addEmployeeSalary = async (company_id, employee_id, formData) => {
+    return await payroll_api.post(`/api/v1/employees/${employee_id}/companies/${company_id}/salaries`, formData);
+}

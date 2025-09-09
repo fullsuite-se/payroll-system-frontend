@@ -6,7 +6,7 @@ import EmployeeCard from "./EmployeeCard";
 import EmployeeTable from "./EmployeeTable";
 
 const EmployeePage = () => {
-    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal } = useEmployeeContext();
+    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, } = useEmployeeContext();
 
     return (
         <>
@@ -31,7 +31,12 @@ const EmployeePage = () => {
                     {/* Employee Card - slides in from right when opened */}
                     {employee && (
                         <div className="w-1/3 min-w-[350px]">
-                            <EmployeeCard employee={employee} setEmployee={setEmployee} />
+                            <EmployeeCard
+                                employee={employee}
+                                setEmployee={setEmployee}
+                                setShowAddSalaryForm={setShowAddSalaryForm}
+                                showAddSalaryForm={showAddSalaryForm}
+                            />
                         </div>
                     )}
                 </div>

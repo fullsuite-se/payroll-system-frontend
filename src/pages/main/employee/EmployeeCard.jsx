@@ -1,7 +1,9 @@
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
+import AddSalaryForm from "./AddSalaryForm";
+import { PencilIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 
-const EmployeeCard = ({ employee, setEmployee }) => {
+const EmployeeCard = ({ employee, setEmployee, showAddSalaryForm, setShowAddSalaryForm }) => {
     if (!employee) {
         return null;
     }
@@ -20,7 +22,9 @@ const EmployeeCard = ({ employee, setEmployee }) => {
     } = employee;
 
     const fullName = [first_name, middle_name, last_name].filter(Boolean).join(" ");
-    const activeSalary = employee_salaries?.find(s => s.is_active);
+
+    // Sort salaries by date (oldest first for chronological order)
+    const sortedSalaries = employee_salaries?.sort((a, b) => new Date(a.date) - new Date(b.date)) || [];
 
     return (
         <div className="h-fit">
@@ -37,12 +41,8 @@ const EmployeeCard = ({ employee, setEmployee }) => {
                 <div className="pr-8">
                     <h2 className="text-xl font-semibold text-gray-800 break-words">{fullName}</h2>
                     <p className="text-gray-600 break-words">{job_title} • {department}</p>
-                    <span
-                        className={`inline-block mt-2 px-2 py-1 text-xs rounded-full ${employement_status
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                            }`}
-                    >
+                    <span className={`inline-block mt-2 px-2 py-1 text-xs rounded-full ${employement_status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                        }`}>
                         {employement_status ? "Active" : "Inactive"}
                     </span>
                 </div>
@@ -61,7 +61,8 @@ const EmployeeCard = ({ employee, setEmployee }) => {
                         Date Hired:{" "}
                         {employee_infos?.date_hired
                             ? format(new Date(employee_infos.date_hired), "MMM dd, yyyy")
-                            : "N/A"}
+                            : "N/A"
+                        }
                     </p>
                     {employee_infos?.date_end && (
                         <p className="text-gray-600 text-sm">
@@ -80,17 +81,61 @@ const EmployeeCard = ({ employee, setEmployee }) => {
                     </p>
                 </div>
 
-                {/* Salary */}
-                {activeSalary && (
-                    <div className="space-y-1">
-                        <h3 className="text-sm font-semibold text-gray-700">Compensation</h3>
-                        <p className="text-gray-600 text-sm">
-                            Base Pay: ${parseFloat(activeSalary.base_pay).toLocaleString()}
-                        </p>
-                        <p className="text-gray-500 text-xs">
-                            Effective: {format(new Date(activeSalary.date), "MMM dd, yyyy")}
-                        </p>
-                    </div>
+                {/* Salary History */}
+                {showAddSalaryForm ? (
+                    <AddSalaryForm />
+                ) : (
+                    <>
+                        {sortedSalaries.length > 0 && (
+                            <div className="relative space-y-1">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-sm font-semibold text-gray-700">Salary History</h3>
+                                    <button
+                                        onClick={() => setShowAddSalaryForm(true)}
+                                        className="cursor-pointer"
+                                    >
+                                        <PlusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                                    </button>
+                                </div>
+
+                                <div className="relative pl-4">
+                                    {/* Vertical Line */}
+                                    <div className="absolute left-2 top-2 bottom-2 w-px bg-gray-200"></div>
+
+                                    {/* Salary Items */}
+                                    <div className="space-y-3">
+                                        {sortedSalaries.map((salary, index) => (
+                                            <div key={salary.employee_salary_id} className="relative">
+                                                {/* Indicator Dot */}
+                                                <div className={`absolute -left-[9px] top-1 w-3 h-3 rounded-full border-2 ${salary.is_active
+                                                    ? "bg-green-500 border-green-500"
+                                                    : "bg-white border-gray-300"
+                                                    }`}></div>
+
+                                                {/* Salary Details */}
+                                                <div className="ml-4">
+                                                    <div className="flex items-center justify-between">
+                                                        <span className={`text-sm font-medium ${salary.is_active ? "text-gray-900" : "text-gray-600"
+                                                            }`}>
+                                                            P{parseFloat(salary.base_pay).toLocaleString()}
+                                                        </span>
+                                                        {salary.is_active && (
+                                                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                                                                Current
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <p className="text-xs text-gray-500">
+                                                        {format(new Date(salary.date), "MMM dd, yyyy")} • {salary.change_type.toLowerCase()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>
