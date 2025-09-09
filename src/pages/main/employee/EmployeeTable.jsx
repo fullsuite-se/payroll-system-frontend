@@ -160,7 +160,7 @@ const EmployeeTable = ({ isCardOpen = false }) => {
                                                 key={currentPage}
                                                 onClick={() => table.setPageIndex(currentPage)}
                                                 className={`px-3 py-1 rounded-md text-sm font-medium ${currentPage === pageIndex
-                                                    ? 'bg-blue-600 text-white'
+                                                    ? 'bg-teal-600 text-white'
                                                     : 'bg-white text-gray-500 border border-gray-300 hover:bg-gray-50'
                                                     }`}
                                             >

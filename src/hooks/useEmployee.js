@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCompanyContext } from "../contexts/CompanyProvider";
-import { fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery } from "../services/employee.service";
+import { createEmployee, fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery } from "../services/employee.service";
 import { useToastContext } from "../contexts/ToastProvider";
 import useDebounce from "./useDebounce";
 import * as XLSX from 'xlsx';
@@ -85,6 +85,11 @@ const useEmployee = () => {
         }
     };
 
+    const handleReloadEmployees = async () => {
+        const result = await fetchEmployeesByCompanyId(company.company_id);
+        setEmployees(result.data.employees);
+    };
+
     const handleShowAddModal = (val) => {
         setShowAddModal(val);
     };
@@ -125,21 +130,36 @@ const useEmployee = () => {
                 return;
             }
 
-            // Logic for adding employees to the database
-            console.log('Adding employees:', validEmployees);
+            const failedEmployees = [];
 
-            // After successful addition, reset form and close modal
-            handleResetForm();
-            handleShowAddModal(false);
-            addToast(`Successfully added ${validEmployees.length} employee(s)`, "success");
+            for (const emp of employeesFormData) {
+                try {
+                    await createEmployee(company.company_id, emp);
+                    addToast(`Successfully added employee: ${emp.first_name} ${emp.last_name}`, "success");
+                } catch (error) {
+                    console.error('Error adding employee:', error);
+                    addToast(`Error adding employee: ${emp.first_name} ${emp.last_name}`, "error");
+                    failedEmployees.push(emp);
+                }
+            }
 
+            // Update the form with only failed employees
+            if (failedEmployees.length > 0) {
+                setEmployeesFormData(failedEmployees);
+            } else {
+                // reset form if all succeeded
+                handleResetForm();
+            }
+
+
+            //reload employees
+            await handleReloadEmployees();
         } catch (error) {
             console.error('Error adding employees:', error);
             addToast("Failed to add employees", "error");
         }
     };
 
-    // Helper function to normalize column headers
     const normalizeHeader = (header) => {
         return header
             .toLowerCase()
@@ -156,25 +176,53 @@ const useEmployee = () => {
             // Get valid form keys
             const formKeys = Object.keys(formData);
 
-            // Map each property from the file data
             Object.entries(row).forEach(([key, value]) => {
                 const normalizedKey = normalizeHeader(key);
 
                 // Find matching form field
-                const matchingField = formKeys.find(formKey =>
-                    normalizeHeader(formKey) === normalizedKey
+                const matchingField = formKeys.find(
+                    (formKey) => normalizeHeader(formKey) === normalizedKey
                 );
 
-                if (matchingField && value !== null && value !== undefined) {
-                    // Handle different data types
-                    if (typeof value === 'string') {
-                        mappedRow[matchingField] = value.trim();
-                    } else if (typeof value === 'number') {
-                        mappedRow[matchingField] = value.toString();
-                    } else if (typeof value === 'boolean') {
+                if (matchingField && value !== null && value !== undefined && value !== "") {
+                    // Handle base_pay (must be number)
+                    if (matchingField === "base_pay") {
+                        mappedRow[matchingField] = Number(value) || null;
+                    }
+                    // Handle date fields (must be string `YYYY-MM-DD` for <input type="date">)
+                    else if (
+                        ["date_hired", "date_end", "date"].includes(matchingField)
+                    ) {
+                        // Excel sometimes gives numbers (serials), sometimes strings
+                        if (typeof value === "number") {
+                            // Convert Excel serial to JS Date
+                            const excelDate = XLSX.SSF.parse_date_code(value);
+                            if (excelDate) {
+                                const jsDate = new Date(
+                                    excelDate.y,
+                                    excelDate.m - 1,
+                                    excelDate.d
+                                );
+                                mappedRow[matchingField] = jsDate.toISOString().slice(0, 10); // "YYYY-MM-DD"
+                            } else {
+                                mappedRow[matchingField] = null;
+                            }
+                        } else if (typeof value === "string" && value.trim()) {
+                            const parsed = new Date(value);
+                            mappedRow[matchingField] = isNaN(parsed)
+                                ? null
+                                : parsed.toISOString().slice(0, 10);
+                        } else {
+                            mappedRow[matchingField] = null;
+                        }
+                    }
+                    // Handle booleans
+                    else if (typeof value === "boolean") {
                         mappedRow[matchingField] = value;
-                    } else {
-                        mappedRow[matchingField] = String(value);
+                    }
+                    // Everything else (strings, text fields)
+                    else {
+                        mappedRow[matchingField] = String(value).trim();
                     }
                 }
             });
