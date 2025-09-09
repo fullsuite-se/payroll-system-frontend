@@ -6,7 +6,7 @@ import EmployeeCard from "./EmployeeCard";
 import EmployeeTable from "./EmployeeTable";
 
 const EmployeePage = () => {
-    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, } = useEmployeeContext();
+    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, handleChangeEmploymentStatus } = useEmployeeContext();
 
     return (
         <>
@@ -36,6 +36,7 @@ const EmployeePage = () => {
                                 setEmployee={setEmployee}
                                 setShowAddSalaryForm={setShowAddSalaryForm}
                                 showAddSalaryForm={showAddSalaryForm}
+                                handleChangeEmploymentStatus={handleChangeEmploymentStatus}
                             />
                         </div>
                     )}

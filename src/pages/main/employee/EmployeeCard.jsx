@@ -3,10 +3,11 @@ import { format } from "date-fns";
 import AddSalaryForm from "./AddSalaryForm";
 import { PencilIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 
-const EmployeeCard = ({ employee, setEmployee, showAddSalaryForm, setShowAddSalaryForm }) => {
+const EmployeeCard = ({ employee, setEmployee, showAddSalaryForm, setShowAddSalaryForm, handleChangeEmploymentStatus }) => {
     if (!employee) {
         return null;
     }
+
 
     const {
         first_name,
@@ -23,6 +24,7 @@ const EmployeeCard = ({ employee, setEmployee, showAddSalaryForm, setShowAddSala
 
     const fullName = [first_name, middle_name, last_name].filter(Boolean).join(" ");
 
+
     // Sort salaries by date (oldest first for chronological order)
     const sortedSalaries = employee_salaries?.sort((a, b) => new Date(a.date) - new Date(b.date)) || [];
 
@@ -36,16 +38,34 @@ const EmployeeCard = ({ employee, setEmployee, showAddSalaryForm, setShowAddSala
                 >
                     <XCircleIcon className="h-6 w-6" />
                 </button>
-
                 {/* Header */}
                 <div className="pr-8">
                     <h2 className="text-xl font-semibold text-gray-800 break-words">{fullName}</h2>
-                    <p className="text-gray-600 break-words">{job_title} • {department}</p>
-                    <span className={`inline-block mt-2 px-2 py-1 text-xs rounded-full ${employement_status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                        }`}>
-                        {employement_status ? "Active" : "Inactive"}
-                    </span>
+                    <p className="text-gray-600 break-words">
+                        {job_title} • {department}
+                    </p>
+
+                    {/* Status Dropdown */}
+                    <select
+                        value={employement_status ? "active" : "inactive"}
+                        onChange={(e) =>
+                            handleChangeEmploymentStatus(employee, e.target.value === "active")
+                        }
+                        className={`mt-2 px-2 py-1 text-xs font-medium rounded-full border focus:outline-none focus:ring-2 transition-colors duration-200 ${employement_status
+                            ? "bg-green-100 text-green-700 border-green-300 focus:ring-green-400"
+                            : "bg-red-100 text-red-700 border-red-300 focus:ring-red-400"
+                            }`}
+                    >
+                        <option value="active" className="text-green-700">
+                            Active
+                        </option>
+                        <option value="inactive" className="text-red-700">
+                            Inactive
+                        </option>
+                    </select>
                 </div>
+
+
 
                 {/* Contact Info */}
                 <div className="space-y-1">

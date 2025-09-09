@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCompanyContext } from "../contexts/CompanyProvider";
-import { addEmployeeSalary, createEmployee, fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery } from "../services/employee.service";
+import { addEmployeeSalary, createEmployee, fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery, updateEmploymentStatus } from "../services/employee.service";
 import { useToastContext } from "../contexts/ToastProvider";
 import useDebounce from "./useDebounce";
 import * as XLSX from 'xlsx';
@@ -77,6 +77,16 @@ const useEmployee = () => {
         return () => { ignore = true };
     }, [company, debouncedQuery]);
 
+    const handleReloadEmployees = async () => {
+        try {
+            const result = await fetchEmployeesByCompanyId(company.company_id);
+            setEmployees(result.data.employees);
+        } catch (error) {
+            console.error(error);
+            addToast("Failed to fetch employees", "error");
+        }
+    }
+
     const handleFetchEmployeeInfo = async (employee_id) => {
         setIsEmployeeLoading(true);
         try {
@@ -91,10 +101,10 @@ const useEmployee = () => {
         }
     };
 
-    const handleReloadEmployees = async () => {
-        const result = await fetchEmployeesByCompanyId(company.company_id);
-        setEmployees(result.data.employees);
-    };
+    // const handleReloadEmployees = async () => {
+    //     const result = await fetchEmployeesByCompanyId(company.company_id);
+    //     setEmployees(result.data.employees);
+    // };
 
     const handleShowAddModal = (val) => {
         setShowAddModal(val);
@@ -343,8 +353,6 @@ const useEmployee = () => {
         setSalaryFormData({ ...formData });
     }
 
-
-
     const handleAddSalary = async () => {
         setIsAddSalaryLoading(true);
         setSalaryFormData({ ...salaryFormData, employee_id: employee.employee_id });
@@ -375,10 +383,26 @@ const useEmployee = () => {
         finally {
             setIsAddSalaryLoading(false);
         }
-        return;
     }
 
 
+    const handleChangeEmploymentStatus = async () => {
+        try {
+            const result = await updateEmploymentStatus(company.company_id, employee.employee_id, !employee.employement_status);
+            console.log('result', result);
+
+            addToast("Salary status updated successfully", "success");
+
+            //trigger fetch of employeeInfo
+            await handleFetchEmployeeInfo(employee.employee_id);
+
+            //trigger fetch of employees to update tables
+            await handleReloadEmployees();
+        } catch (error) {
+            console.log(error);
+            addToast("Failed update employment status", "error");
+        }
+    }
 
 
     return {
@@ -406,6 +430,7 @@ const useEmployee = () => {
         salaryFormData, setSalaryFormData,
         handleAddSalary,
         isAddSalaryLoading, setIsAddSalaryLoading,
+        handleChangeEmploymentStatus
     };
 };
 
