@@ -13,7 +13,7 @@ import {
     ChevronLeftIcon,
     ChevronRightIcon
 } from "@heroicons/react/24/outline";
-import { compactEmployeeColumns, fullEmployeeColumns } from "./tableConfigs";
+import { compactEmployeeColumns, fullEmployeeColumns } from "./TableConfigs";
 
 const EmployeeTable = ({ isCardOpen = false }) => {
     const { employees, handleFetchEmployeeInfo } = useEmployeeContext();
