@@ -10,6 +10,29 @@ import {
 } from "@heroicons/react/24/outline";
 
 const CompanyDetails = ({ company }) => {
+    // Add null checks and early return
+    if (!company || !company.companies_info) {
+        return (
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div className="animate-pulse">
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                        <div className="w-20 h-20 bg-gray-200 rounded-xl"></div>
+                        <div className="flex-grow">
+                            <div className="h-6 bg-gray-200 rounded w-48 mb-2"></div>
+                            <div className="h-4 bg-gray-200 rounded w-32 mb-4"></div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="h-4 bg-gray-200 rounded w-40"></div>
+                                <div className="h-4 bg-gray-200 rounded w-32"></div>
+                                <div className="h-4 bg-gray-200 rounded w-36"></div>
+                                <div className="h-4 bg-gray-200 rounded w-36"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const { companies_info } = company;
 
     return (
@@ -60,47 +83,12 @@ const CompanyDetails = ({ company }) => {
                 </div>
 
                 {/* company infos */}
-                {/* <div className="grid grid-cols-2 border-l border-gray-300 px-4 ">
-                    <div className="flex items-start gap-4">
-                        <MapPinIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                            <p className="text-gray-500 text-sm">Address</p>
-                            <p className="text-gray-700 text-xs">{companies_info.company_address}</p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                        <PhoneIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                            <p className="text-gray-500 text-sm">Phone</p>
-                            <p className="text-gray-700 text-xs">{companies_info.company_phone}</p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                        <DocumentTextIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                            <p className="text-gray-500 text-sm">Tax ID Number</p>
-                            <p className="text-gray-700 text-xs">{companies_info.company_tin}</p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                        <BuildingLibraryIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                            <p className="text-gray-500 text-sm">Business Type</p>
-                            <p className="text-gray-700 text-xs">{companies_info.business_type}</p>
-                        </div>
-                    </div>
-                </div> */}
-
-                {/* company infos */}
                 <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-l border-gray-300 px-6 py-4">
                     <div className="flex items-start gap-3">
                         <MapPinIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                         <div>
                             <p className="text-gray-500 text-sm">Address</p>
-                            <p className="text-gray-700 text-xs">{companies_info.company_address}</p>
+                            <p className="text-gray-700 text-xs">{companies_info.company_address || 'N/A'}</p>
                         </div>
                     </div>
 
@@ -108,7 +96,7 @@ const CompanyDetails = ({ company }) => {
                         <PhoneIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                         <div>
                             <p className="text-gray-500 text-sm">Phone</p>
-                            <p className="text-gray-700 text-xs">{companies_info.company_phone}</p>
+                            <p className="text-gray-700 text-xs">{companies_info.company_phone || 'N/A'}</p>
                         </div>
                     </div>
 
@@ -116,7 +104,7 @@ const CompanyDetails = ({ company }) => {
                         <DocumentTextIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                         <div>
                             <p className="text-gray-500 text-sm">Tax ID Number</p>
-                            <p className="text-gray-700 text-xs">{companies_info.company_tin}</p>
+                            <p className="text-gray-700 text-xs">{companies_info.company_tin || 'N/A'}</p>
                         </div>
                     </div>
 
@@ -124,16 +112,11 @@ const CompanyDetails = ({ company }) => {
                         <BuildingLibraryIcon className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                         <div>
                             <p className="text-gray-500 text-sm">Business Type</p>
-                            <p className="text-gray-700 text-xs">{companies_info.business_type}</p>
+                            <p className="text-gray-700 text-xs">{companies_info.business_type || 'N/A'}</p>
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
-
-
         </div>
     );
 };

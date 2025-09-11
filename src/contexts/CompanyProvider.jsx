@@ -8,8 +8,14 @@ const CompanyContext = createContext();
 export const CompanyProvider = ({ children }) => {
     const company = useCompany();
 
-    //wait for loading to finish before rendering children
-    if (company.loading) return null;
+    // Wait for both initial loading and company full detail loading to finish
+    if (company.loading || company.isCompanyFullDetailLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
 
     return (
         <CompanyContext.Provider value={{ ...company }}>
