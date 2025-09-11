@@ -5,6 +5,7 @@ import {
     createCompanyWorkingDays,
     createUserToManageCompany,
     getCompaniesService,
+    getCompanyFullDetail,
     updateCompany,
     updateCompanyInfo,
 } from "../services/company.service";
@@ -36,6 +37,8 @@ const useCompany = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [companies, setCompanies] = useState([]);
     const [company, setCompany] = useState(null);
+    const [companyFullDetail, setCompanyFullDetail] = useState();
+    const [isCompanyFullDetailLoading, setIsCompanyFullDetailLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isAddCompanyModalOpen, setIsAddCompanyModalOpen] = useState(false);
     const [isAddCompanyLoading, setIsAddCompanyLoading] = useState(false);
@@ -100,6 +103,29 @@ const useCompany = () => {
                 company_tin: company.company_tin,
                 business_type: company.business_type,
             });
+        }
+    }, [company]);
+
+    const handleFetchCompanyFullDetail = async (companyId) => {
+        if (!companyId) return;
+        setIsCompanyFullDetailLoading(true);
+        try {
+            const result = await getCompanyFullDetail(companyId);
+            setCompanyFullDetail(result.data.company);
+        } catch (error) {
+            console.log(error);
+            addToast("Failed to fetch company's full detail", "error")
+        } finally {
+            setIsCompanyFullDetailLoading(false);
+        }
+    };
+
+    //get companies full detail
+    useEffect(() => {
+        if (company?.company_id) {
+            handleFetchCompanyFullDetail(company.company_id);
+        } else {
+            setCompanyFullDetail(null); // clear out if no company
         }
     }, [company]);
 
@@ -265,7 +291,8 @@ const useCompany = () => {
         isEditCompanyInfo, setIsEditCompanyInfo,
         isEditCompanyInfoLoading, setIsEditCompanyInfoLoading,
         isEditCompanyLoading, setIsEditCompanyLoading,
-        isEditCompanyModalOpen, setIsEditCompanyModalOpen
+        isEditCompanyModalOpen, setIsEditCompanyModalOpen,
+        companyFullDetail, isCompanyFullDetailLoading
     };
 };
 
