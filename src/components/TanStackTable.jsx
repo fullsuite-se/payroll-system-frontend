@@ -1,13 +1,79 @@
 import { useReactTable, getCoreRowModel, flexRender, getSortedRowModel, getPaginationRowModel } from "@tanstack/react-table";
 import { useState } from "react";
-import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, EllipsisVerticalIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 
-const TanStackTable = ({ data, columns, onRowClick }) => {
+const TanStackTable = ({ data, columns, onRowClick, onDelete }) => {
     const [sorting, setSorting] = useState([]);
+    const [openDropdown, setOpenDropdown] = useState(null);
+
+    // Add actions column to the existing columns
+    const columnsWithActions = [
+        ...columns,
+        {
+            id: 'actions',
+            header: '',
+            cell: ({ row }) => (
+                <div className="relative">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent row click
+                            setOpenDropdown(openDropdown === row.id ? null : row.id);
+                        }}
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    >
+                        <EllipsisVerticalIcon className="h-4 w-4 text-gray-500" />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {openDropdown === row.id && (
+                        <>
+                            {/* Backdrop to close dropdown when clicking outside */}
+                            <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenDropdown(null)}
+                            />
+                            <div className="absolute right-0 top-full mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                                <div className="py-1">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            // TODO: Handle update action
+                                            console.log('Update clicked for:', row.original);
+                                            setOpenDropdown(null);
+                                        }}
+                                        className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                    >
+                                        <PencilIcon className="h-4 w-4 mr-2" />
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (onDelete) {
+                                                // You can access the unique ID here - adjust based on your data structure
+                                                // Common patterns: row.original.id, row.original._id, row.original.uuid, etc.
+                                                onDelete(row.original.id || row.original._id || row.original);
+                                            }
+                                            setOpenDropdown(null);
+                                        }}
+                                        className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                    >
+                                        <TrashIcon className="h-4 w-4 mr-2" />
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </div>
+            ),
+            size: 60, // Fixed width for actions column
+        }
+    ];
 
     const table = useReactTable({
         data,
-        columns,
+        columns: columnsWithActions,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -22,8 +88,11 @@ const TanStackTable = ({ data, columns, onRowClick }) => {
         },
     });
 
-    const handleRowClick = (row) => {
-        if (onRowClick) {
+    const handleRowClick = (row, event) => {
+        // Check if the click came from the actions column
+        const isActionsColumn = event.target.closest('[data-actions-column]');
+
+        if (!isActionsColumn && onRowClick) {
             onRowClick(row.original, row);
         }
     };
@@ -47,6 +116,9 @@ const TanStackTable = ({ data, columns, onRowClick }) => {
                                             key={header.id}
                                             colSpan={header.colSpan}
                                             className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            style={{
+                                                width: header.id === 'actions' ? '60px' : 'auto'
+                                            }}
                                         >
                                             {header.isPlaceholder ? null : (
                                                 <div
@@ -91,12 +163,13 @@ const TanStackTable = ({ data, columns, onRowClick }) => {
                                     key={row.id}
                                     className={`hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
                                         } ${onRowClick ? 'cursor-pointer' : ''}`}
-                                    onClick={() => handleRowClick(row)}
+                                    onClick={(e) => handleRowClick(row, e)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <td
                                             key={cell.id}
-                                            className="px-6 py-4 text-sm text-gray-900 text-center"
+                                            className="px-6 py-4 text-xs text-gray-900 text-center"
+                                            {...(cell.column.id === 'actions' ? { 'data-actions-column': true } : {})}
                                         >
                                             <div className="whitespace-normal break-words">
                                                 {flexRender(
