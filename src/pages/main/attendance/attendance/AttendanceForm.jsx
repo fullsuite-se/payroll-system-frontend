@@ -1,6 +1,6 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useAttendanceContext } from "../../../../contexts/AttendanceProvider";
-
+import { toDatetimeLocalString, toSqlDateTimeString } from "../../../../utility/datetime.utility";
 const AttendanceForm = () => {
     const { handleAddRow, handleResetForm, handleFieldChange, handleAddAttendances, attendanceFormData, handleRemoveRow } = useAttendanceContext();
 
@@ -8,20 +8,6 @@ const AttendanceForm = () => {
         e.preventDefault();
         handleAddAttendances();
     }
-
-    // Helper function to convert "YYYY-MM-DD HH:MM:SS" to "YYYY-MM-DDTHH:MM" format for datetime-local input
-    const formatDateTimeForInput = (dateTimeString) => {
-        if (!dateTimeString) return '';
-        // Convert "YYYY-MM-DD HH:MM:SS" to "YYYY-MM-DDTHH:MM"
-        return dateTimeString.slice(0, 16).replace(' ', 'T');
-    };
-
-    // Helper function to convert datetime-local input value to "YYYY-MM-DD HH:MM:SS" format
-    const formatDateTimeForBackend = (inputValue) => {
-        if (!inputValue) return '';
-        // Convert "YYYY-MM-DDTHH:MM" to "YYYY-MM-DD HH:MM:SS"
-        return inputValue.replace('T', ' ') + ':00';
-    };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -76,16 +62,16 @@ const AttendanceForm = () => {
                                 {/* Time In */}
                                 <input
                                     type="datetime-local"
-                                    value={formatDateTimeForInput(att.time_in)}
-                                    onChange={(e) => handleFieldChange(att.id, 'time_in', formatDateTimeForBackend(e.target.value))}
+                                    value={toDatetimeLocalString(att.time_in)}
+                                    onChange={(e) => handleFieldChange(att.id, 'time_in', toSqlDateTimeString(e.target.value))}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
                                 {/* Time Out */}
                                 <input
                                     type="datetime-local"
-                                    value={formatDateTimeForInput(att.time_out)}
-                                    onChange={(e) => handleFieldChange(att.id, 'time_out', formatDateTimeForBackend(e.target.value))}
+                                    value={toDatetimeLocalString(att.time_out)}
+                                    onChange={(e) => handleFieldChange(att.id, 'time_out', toSqlDateTimeString(e.target.value))}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
