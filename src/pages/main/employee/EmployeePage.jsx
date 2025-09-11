@@ -1,12 +1,13 @@
 // export default EmployeePage;
+import AddModal from "../../../components/AddModal";
 import Search from "../../../components/Search";
 import { useEmployeeContext } from "../../../contexts/EmployeeProvider";
-import AddEmployeeModal from "./AddEmployeeModal";
+import AddEmployeeForm from "./AddEmployeeForm";
 import EmployeeCard from "./EmployeeCard";
 import EmployeeTable from "./EmployeeTable";
 
 const EmployeePage = () => {
-    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, handleChangeEmploymentStatus } = useEmployeeContext();
+    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, handleChangeEmploymentStatus, uploadEmployeeFile, isUploading } = useEmployeeContext();
 
     return (
         <>
@@ -42,7 +43,19 @@ const EmployeePage = () => {
                     )}
                 </div>
             </div>
-            {showAddModal && <AddEmployeeModal onClose={() => handleShowAddModal(false)} />}
+            {/* {showAddModal && <AddEmployeeModal onClose={() => handleShowAddModal(false)} />} */}
+            {showAddModal
+                && <AddModal
+                    onClose={() => handleShowAddModal(false)}
+                    title="Add Employee"
+                    description="Employees added will be included in the payrun, depending on employment status."
+                    uploadFile={uploadEmployeeFile}
+                    isUploading={isUploading}
+                >
+                    <AddEmployeeForm />
+                </AddModal>
+            }
+
         </>
     );
 };
