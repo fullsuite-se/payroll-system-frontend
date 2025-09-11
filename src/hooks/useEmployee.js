@@ -1,3 +1,4 @@
+// export default useEmployee;
 import { useEffect, useState } from "react";
 import { useCompanyContext } from "../contexts/CompanyProvider";
 import { addEmployeeSalary, createEmployee, fetchEmployeeById, fetchEmployeesByCompanyId, fetchEmployeesByCompanyIdAndQuery, updateEmploymentStatus } from "../services/employee.service";
@@ -18,16 +19,59 @@ const formData = {
     permanent_address: '',
     current_address: '',
     civil_status: '',
-    date_hired: '',
+    date_hired: null, // Changed: Use null instead of empty string for consistent date handling
     date_end: null, // nullable
     sex: '',
     base_pay: null, // nullable number
-    date: null, // nullable date
+    date: null, // nullable date - for salary start date
     change_type: '',
     is_active: true,
 };
 
+// Helper function to format date to ISO format (YYYY-MM-DD)
+const formatToISODate = (dateValue) => {
+    if (!dateValue) return null;
 
+    // If it's already a string in YYYY-MM-DD format, return as-is
+    if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        return dateValue;
+    }
+
+    // If it's a Date object or parseable string, convert to YYYY-MM-DD
+    const date = new Date(dateValue);
+    if (!isNaN(date.getTime())) {
+        return date.toISOString().slice(0, 10);
+    }
+
+    return null;
+};
+
+// Helper function to validate required date fields
+const validateEmployeeData = (employee) => {
+    const errors = [];
+
+    // Check required text fields
+    if (!employee.first_name?.trim()) errors.push("First name is required");
+    if (!employee.last_name?.trim()) errors.push("Last name is required");
+    if (!employee.personal_email?.trim()) errors.push("Personal email is required");
+    if (!employee.work_email?.trim()) errors.push("Work email is required");
+    if (!employee.job_title?.trim()) errors.push("Job title is required");
+    if (!employee.department?.trim()) errors.push("Department is required");
+    if (!employee.permanent_address?.trim()) errors.push("Permanent address is required");
+    if (!employee.current_address?.trim()) errors.push("Current address is required");
+    if (!employee.civil_status?.trim()) errors.push("Civil status is required");
+    if (!employee.sex?.trim()) errors.push("Sex is required");
+    if (!employee.change_type?.trim()) errors.push("Change type is required");
+
+    // Check required date fields
+    if (!employee.date_hired) errors.push("Date hired is required");
+    if (!employee.date) errors.push("Base pay start date is required");
+
+    // Check required numeric fields
+    if (!employee.base_pay || employee.base_pay <= 0) errors.push("Base pay is required and must be greater than 0");
+
+    return errors;
+};
 
 const useEmployee = () => {
     const { company } = useCompanyContext();
@@ -101,11 +145,6 @@ const useEmployee = () => {
         }
     };
 
-    // const handleReloadEmployees = async () => {
-    //     const result = await fetchEmployeesByCompanyId(company.company_id);
-    //     setEmployees(result.data.employees);
-    // };
-
     const handleShowAddModal = (val) => {
         setShowAddModal(val);
     };
@@ -124,9 +163,16 @@ const useEmployee = () => {
 
     const handleFieldChange = (id, field, value) => {
         setEmployeesFormData(prev =>
-            prev.map(row =>
-                row.id === id ? { ...row, [field]: value } : row
-            )
+            prev.map(row => {
+                if (row.id === id) {
+                    // Handle date fields specially to ensure ISO format
+                    if (['date_hired', 'date_end', 'date'].includes(field)) {
+                        return { ...row, [field]: formatToISODate(value) };
+                    }
+                    return { ...row, [field]: value };
+                }
+                return row;
+            })
         );
     };
 
@@ -136,37 +182,57 @@ const useEmployee = () => {
 
     const handleAddEmployees = async () => {
         try {
-            // Validate form data
-            const validEmployees = employeesFormData.filter(emp =>
-                emp.first_name.trim() && emp.last_name.trim()
-            );
+            // Enhanced validation
+            const validationResults = employeesFormData.map((emp, index) => ({
+                employee: emp,
+                index,
+                errors: validateEmployeeData(emp)
+            }));
+
+            // Filter out employees with validation errors
+            const validEmployees = validationResults.filter(result => result.errors.length === 0);
+            const invalidEmployees = validationResults.filter(result => result.errors.length > 0);
+
+            // Show validation errors
+            if (invalidEmployees.length > 0) {
+                invalidEmployees.forEach(result => {
+                    addToast(`Row ${result.index + 1}: ${result.errors.join(', ')}`, "error");
+                });
+            }
 
             if (validEmployees.length === 0) {
-                addToast("Please fill in at least first name and last name for each employee", "error");
+                addToast("Please fix validation errors before submitting", "error");
                 return;
             }
 
             const failedEmployees = [];
 
-            for (const emp of employeesFormData) {
+            for (const result of validEmployees) {
                 try {
-                    await createEmployee(company.company_id, emp);
-                    addToast(`Successfully added employee: ${emp.first_name} ${emp.last_name}`, "success");
+                    // Ensure all dates are in ISO format before sending
+                    const employeeData = {
+                        ...result.employee,
+                        date_hired: formatToISODate(result.employee.date_hired),
+                        date_end: formatToISODate(result.employee.date_end),
+                        date: formatToISODate(result.employee.date),
+                    };
+
+                    await createEmployee(company.company_id, employeeData);
+                    addToast(`Successfully added employee: ${result.employee.first_name} ${result.employee.last_name}`, "success");
                 } catch (error) {
                     console.error('Error adding employee:', error);
-                    addToast(`Error adding employee: ${emp.first_name} ${emp.last_name}`, "error");
-                    failedEmployees.push(emp);
+                    addToast(`Error adding employee: ${result.employee.first_name} ${result.employee.last_name}`, "error");
+                    failedEmployees.push(result.employee);
                 }
             }
 
             // Update the form with only failed employees
             if (failedEmployees.length > 0) {
-                setEmployeesFormData(failedEmployees);
+                setEmployeesFormData(failedEmployees.map((emp, index) => ({ ...emp, id: Date.now() + index })));
             } else {
                 // reset form if all succeeded
                 handleResetForm();
             }
-
 
             //reload employees
             await handleReloadEmployees();
@@ -182,6 +248,20 @@ const useEmployee = () => {
             .trim()
             .replace(/\s+/g, '_')
             .replace(/[^\w]/g, '');
+    };
+
+    // Helper function to convert string boolean values to actual booleans
+    const convertToBoolean = (value) => {
+        if (typeof value === "boolean") return value;
+        if (typeof value === "string") {
+            const lowerValue = value.toLowerCase().trim();
+            if (lowerValue === "true" || lowerValue === "1" || lowerValue === "yes") return true;
+            if (lowerValue === "false" || lowerValue === "0" || lowerValue === "no") return false;
+        }
+        if (typeof value === "number") {
+            return value === 1;
+        }
+        return value;
     };
 
     // Helper function to map file data to form structure
@@ -219,20 +299,23 @@ const useEmployee = () => {
                                     excelDate.m - 1,
                                     excelDate.d
                                 );
-                                mappedRow[matchingField] = jsDate.toISOString().slice(0, 10); // "YYYY-MM-DD"
+                                mappedRow[matchingField] = formatToISODate(jsDate);
                             } else {
                                 mappedRow[matchingField] = null;
                             }
                         } else if (typeof value === "string" && value.trim()) {
-                            const parsed = new Date(value);
-                            mappedRow[matchingField] = isNaN(parsed)
-                                ? null
-                                : parsed.toISOString().slice(0, 10);
+                            mappedRow[matchingField] = formatToISODate(value);
                         } else {
                             mappedRow[matchingField] = null;
                         }
                     }
-                    // Handle booleans
+                    // Handle boolean fields specifically
+                    else if (
+                        ["employement_status", "is_active"].includes(matchingField)
+                    ) {
+                        mappedRow[matchingField] = convertToBoolean(value);
+                    }
+                    // Handle other booleans
                     else if (typeof value === "boolean") {
                         mappedRow[matchingField] = value;
                     }
@@ -300,7 +383,7 @@ const useEmployee = () => {
 
         const fileExtension = file.name.split('.').pop().toLowerCase();
 
-        if (!['csv', 'xlsx', 'xls'].includes(fileExtension)) {
+        if (!['xlsx', 'xls'].includes(fileExtension)) {
             addToast("Please upload a CSV or Excel file", "error");
             return;
         }
@@ -310,9 +393,7 @@ const useEmployee = () => {
         try {
             let parsedData = [];
 
-            if (fileExtension === 'csv') {
-                parsedData = await parseCSVFile(file);
-            } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+            if (fileExtension === 'xlsx' || fileExtension === 'xls') {
                 parsedData = await parseExcelFile(file);
             }
 
@@ -362,6 +443,7 @@ const useEmployee = () => {
             employee_id: employee.employee_id,
             company_id: company.company_id,
             base_pay: Number(salaryFormData.base_pay),
+            date: formatToISODate(salaryFormData.date), // Ensure ISO format
         }
 
         try {
@@ -385,13 +467,12 @@ const useEmployee = () => {
         }
     }
 
-
     const handleChangeEmploymentStatus = async () => {
         try {
             const result = await updateEmploymentStatus(company.company_id, employee.employee_id, !employee.employement_status);
             console.log('result', result);
 
-            addToast("Salary status updated successfully", "success");
+            addToast("Employment status updated successfully", "success");
 
             //trigger fetch of employeeInfo
             await handleFetchEmployeeInfo(employee.employee_id);
@@ -400,10 +481,9 @@ const useEmployee = () => {
             await handleReloadEmployees();
         } catch (error) {
             console.log(error);
-            addToast("Failed update employment status", "error");
+            addToast("Failed to update employment status", "error");
         }
     }
-
 
     return {
         employees, setEmployees,

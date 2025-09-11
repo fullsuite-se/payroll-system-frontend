@@ -16,6 +16,13 @@ const AddEmployeeForm = () => {
         handleAddEmployees();
     };
 
+    // Helper function to handle date input changes
+    const handleDateChange = (employeeId, field, value) => {
+        // HTML date inputs return empty string when cleared, but we want null
+        const dateValue = value === '' ? null : value;
+        handleFieldChange(employeeId, field, dateValue);
+    };
+
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Table Header */}
@@ -61,7 +68,6 @@ const AddEmployeeForm = () => {
                                     onChange={(e) => handleFieldChange(employee.id, 'employee_id', e.target.value)}
                                     placeholder="Employee Id"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    required
                                 />
 
                                 {/* First Name */}
@@ -79,7 +85,7 @@ const AddEmployeeForm = () => {
                                 <input
                                     type="text"
                                     value={employee.middle_name || ''}
-                                    onChange={(e) => handleFieldChange(employee.id, 'middle_name', e.target.value)}
+                                    onChange={(e) => handleFieldChange(employee.id, 'middle_name', e.target.value || null)}
                                     placeholder="Middle name"
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     maxLength={100}
@@ -145,6 +151,7 @@ const AddEmployeeForm = () => {
                                     value={employee.employement_status ? 'active' : 'inactive'}
                                     onChange={(e) => handleFieldChange(employee.id, 'employement_status', e.target.value === 'active')}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                    required
                                 >
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
@@ -175,6 +182,7 @@ const AddEmployeeForm = () => {
                                     value={employee.civil_status}
                                     onChange={(e) => handleFieldChange(employee.id, 'civil_status', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                    required
                                 >
                                     <option value="">Select Status</option>
                                     <option value="single">Single</option>
@@ -186,8 +194,8 @@ const AddEmployeeForm = () => {
                                 {/* Date Hired - Date input */}
                                 <input
                                     type="date"
-                                    value={employee.date_hired}
-                                    onChange={(e) => handleFieldChange(employee.id, 'date_hired', e.target.value)}
+                                    value={employee.date_hired || ''}
+                                    onChange={(e) => handleDateChange(employee.id, 'date_hired', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     required
                                 />
@@ -196,7 +204,7 @@ const AddEmployeeForm = () => {
                                 <input
                                     type="date"
                                     value={employee.date_end || ''}
-                                    onChange={(e) => handleFieldChange(employee.id, 'date_end', e.target.value || null)}
+                                    onChange={(e) => handleDateChange(employee.id, 'date_end', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
 
@@ -205,6 +213,7 @@ const AddEmployeeForm = () => {
                                     value={employee.sex}
                                     onChange={(e) => handleFieldChange(employee.id, 'sex', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                    required
                                 >
                                     <option value="">Select</option>
                                     <option value="male">Male</option>
@@ -227,7 +236,7 @@ const AddEmployeeForm = () => {
                                 <input
                                     type="date"
                                     value={employee.date || ''}
-                                    onChange={(e) => handleFieldChange(employee.id, 'date', e.target.value || null)}
+                                    onChange={(e) => handleDateChange(employee.id, 'date', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     required
                                 />
@@ -237,6 +246,7 @@ const AddEmployeeForm = () => {
                                     value={employee.change_type}
                                     onChange={(e) => handleFieldChange(employee.id, 'change_type', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                    required
                                 >
                                     <option value="">Select Type</option>
                                     <option value="STARTING">Starting</option>
