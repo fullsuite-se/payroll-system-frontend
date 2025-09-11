@@ -11,3 +11,15 @@ export const convertToISO8601 = (date) => {
 
     return `${year}-${month}-${day}`;
 };
+
+// Converts "YYYY-MM-DD HH:MM:SS" → "YYYY-MM-DDTHH:MM" (for datetime-local input)
+export const toDatetimeLocalString = (dateTimeString) => {
+    if (!dateTimeString) return '';
+    return dateTimeString.slice(0, 16).replace(' ', 'T');
+};
+
+// Converts "YYYY-MM-DDTHH:MM" → "YYYY-MM-DD HH:MM:SS" (for backend)
+export const toSqlDateTimeString = (inputValue) => {
+    if (!inputValue) return '';
+    return inputValue.replace('T', ' ') + ':00';
+};
