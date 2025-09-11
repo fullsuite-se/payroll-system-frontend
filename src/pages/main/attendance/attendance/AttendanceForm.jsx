@@ -23,7 +23,7 @@ const AttendanceForm = () => {
                         <div>Time Out</div>
                         <div>Hours Rendered</div>
                         <div>Hours Worked</div>
-                        <div>Hours Logged</div>
+                        {/* <div>Hours Logged</div> */}
                         <div>Undertime</div>
                         <div>Tardiness</div>
                         <div>Night Differential</div>
@@ -96,14 +96,14 @@ const AttendanceForm = () => {
                                 />
 
                                 {/* Hours logged */}
-                                <input
+                                {/* <input
                                     type="number"
                                     step="0.01"
                                     min="0"
                                     value={att.hours_logged || ''}
                                     onChange={(e) => handleFieldChange(att.id, 'hours_logged', e.target.value)}
                                     className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
+                                /> */}
 
                                 {/* Undertime */}
                                 <input

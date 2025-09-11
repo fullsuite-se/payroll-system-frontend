@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useEmployeeContext } from "../contexts/EmployeeProvider";
 import { useCompanyContext } from "../contexts/CompanyProvider";
 import { useToastContext } from "../contexts/ToastProvider";
-import { addOneAttendance, fetchAttendances } from "../services/attendance.service";
+import { addOneAttendance, deleteAttendance, fetchAttendances } from "../services/attendance.service";
 import * as XLSX from 'xlsx';
 import { formatDateTime, formatDateToISO18601, normalizeHeader, parseExcelDateTime } from "../utility/upload.utility";
 
@@ -30,6 +30,7 @@ const useAttendance = () => {
     const [attendanceFormData, setAttendanceFormData] = useState([{
         id: Date.now(), ...formData
     }]);
+
 
     const { employee } = useEmployeeContext();
     const { company } = useCompanyContext();
@@ -319,6 +320,20 @@ const useAttendance = () => {
         }
     };
 
+    const handleDeleteOneAttendance = async (rowData) => {
+        console.log('attendance id: ', rowData.employee_attendance_id);
+
+        try {
+            await deleteAttendance(company.company_id, rowData.employee_attendance_id);
+            addToast("Records successfully deleted", "success");
+            //trigger reload of attendances
+            await handleFetchAttendances();
+        } catch (error) {
+            console.log(error);
+            addToast("Failed to delete record", "error");
+        }
+    }
+
     return {
         attendances, setAttendances,
         attendance, setAttendance,
@@ -336,6 +351,9 @@ const useAttendance = () => {
 
         //form adding
         handleAddAttendances,
+
+        //delete 
+        handleDeleteOneAttendance
     };
 };
 

@@ -31,11 +31,11 @@ export const column = [
         header: "Hours Worked",
         cell: (info) => info.getValue(),
     },
-    {
-        accessorKey: "hours_logged", //based on biometrics
-        header: "Hours Logged",
-        cell: (info) => info.getValue(),
-    },
+    // {
+    //     accessorKey: "hours_logged", //based on biometrics
+    //     header: "Hours Logged",
+    //     cell: (info) => info.getValue(),
+    // },
     {
         accessorKey: "undertime", //hours not completed
         header: "Undertime",

@@ -22,3 +22,7 @@ export const addOneAttendance = async (company_id, formData) => {
 export const updateAttendance = async (company_id, employee_attendance_id, formData) => {
     return await payroll_api.patch(`/api/v1/daily-records/companies/${company_id}/attendances/${employee_attendance_id}`, formData);
 }
+
+export const deleteAttendance = async (company_id, employee_attendance_id) => {
+    return await payroll_api.delete(`/api/v1/daily-records/companies/${company_id}/attendances/${employee_attendance_id}`);
+}

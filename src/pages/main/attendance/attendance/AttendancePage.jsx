@@ -6,7 +6,7 @@ import AttendanceForm from "./AttendanceForm";
 import { column } from "./TableConfigs";
 
 const AttendancePage = () => {
-    const { attendances, isAttendancesLoading, handleRowClick, handleShowAttendanceModal, showAttendanceModal, isUploading, uploadAttendanceFile } = useAttendanceContext();
+    const { attendances, isAttendancesLoading, handleRowClick, handleShowAttendanceModal, showAttendanceModal, isUploading, uploadAttendanceFile, handleDeleteOneAttendance } = useAttendanceContext();
 
     if (isAttendancesLoading) return <div>Loading ...</div>;
 
@@ -23,6 +23,7 @@ const AttendancePage = () => {
                         data={attendances}
                         columns={column}
                         onRowClick={handleRowClick}
+                        onDelete={handleDeleteOneAttendance}
                     />
                 </div>
             </div>
