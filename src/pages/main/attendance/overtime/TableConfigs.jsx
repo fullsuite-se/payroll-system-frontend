@@ -29,6 +29,13 @@ export const column = [
     {
         accessorKey: "overtime_status",
         header: "Status",
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+            <span className={`inline-block px-2 py-1 text-xs rounded-full 
+                ${info.getValue() == "PENDING" ? "bg-gray-300 text-gray-800" : ""}
+                ${info.getValue() == "ACCEPTED" ? "bg-green-100 text-green-700" : ""}
+                ${info.getValue() == "REJECTED" ? "bg-red-100 text-red-700" : ""}`}>
+                {info.getValue()}
+            </span>
+        ),
     },
 ];
