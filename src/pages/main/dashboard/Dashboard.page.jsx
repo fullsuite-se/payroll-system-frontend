@@ -1,6 +1,7 @@
 import Question1Img from "../../../../public/question1.svg";
 import Question from "../../../components/Question";
 import { useCompanyContext } from "../../../contexts/CompanyProvider";
+import DashboardPlaceholder from "./DashboardPlaceholder";
 
 
 const DashboardPage = () => {
@@ -16,9 +17,8 @@ const DashboardPage = () => {
     />;
 
     return (
-        <div>
-            this is dashboard page
-        </div>
+
+        <DashboardPlaceholder />
     );
 }
 
