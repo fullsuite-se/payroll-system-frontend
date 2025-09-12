@@ -1,0 +1,42 @@
+import { convertToISO8601 } from "../../../../utility/datetime.utility";
+
+export const column = [
+    {
+        accessorKey: "employee_id",
+        header: "Employee ID",
+        cell: (info) => info.getValue(),
+    },
+    {
+        accessorKey: "leave_date",
+        header: "Leave Date",
+        cell: (info) => convertToISO8601(info.getValue()),
+    },
+    {
+        accessorKey: "leave_type",
+        header: "Type",
+        cell: (info) => info.getValue(),
+    },
+    {
+        accessorKey: "leave_status",
+        header: "Leave Status",
+        cell: (info) => info.getValue(),
+    },
+    // {
+    //     accessorKey: "is_paid",
+    //     header: "Paid",
+    //     cell: (info) => info.getValue(),
+    // },
+    {
+        accessorKey: "is_paid",
+        header: "Status",
+        cell: (info) => (
+            <span className={`inline-block px-2 py-1 text-xs rounded-full ${info.getValue()
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+                }`}>
+                {info.getValue() ? "Active" : "Inactive"}
+            </span>
+        ),
+    },
+
+];
