@@ -27,6 +27,7 @@ const useAttendance = () => {
     const [isAttendanceLoading, setIsAttendanceLoading] = useState(false);
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isAddAttendanceLoading, setIsAddAttendanceLoading] = useState(false);
     const [attendanceFormData, setAttendanceFormData] = useState([{
         id: Date.now(), ...formData
     }]);
@@ -249,6 +250,7 @@ const useAttendance = () => {
     };
 
     const handleAddAttendances = async () => {
+        setIsAddAttendanceLoading(true);
         try {
             // Validate form data - require employee_id and attendance_date
             const validAttendances = attendanceFormData.filter(att =>
@@ -318,6 +320,9 @@ const useAttendance = () => {
             console.error('Error adding attendances:', error);
             addToast("Failed to add attendances", "error");
         }
+        finally {
+            setIsAddAttendanceLoading(false);
+        }
     };
 
     const handleDeleteOneAttendance = async (rowData) => {
@@ -348,6 +353,7 @@ const useAttendance = () => {
         //form manipulation
         attendanceFormData,
         handleAddRow, handleRemoveRow, handleFieldChange, handleResetForm,
+        isAddAttendanceLoading, setIsAddAttendanceLoading,
 
         //form adding
         handleAddAttendances,

@@ -2,7 +2,7 @@ import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useAttendanceContext } from "../../../../contexts/AttendanceProvider";
 import { toDatetimeLocalString, toSqlDateTimeString } from "../../../../utility/datetime.utility";
 const AttendanceForm = () => {
-    const { handleAddRow, handleResetForm, handleFieldChange, handleAddAttendances, attendanceFormData, handleRemoveRow } = useAttendanceContext();
+    const { handleAddRow, handleResetForm, handleFieldChange, handleAddAttendances, attendanceFormData, handleRemoveRow, isAddAttendanceLoading } = useAttendanceContext();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -188,7 +188,7 @@ const AttendanceForm = () => {
                     type="submit"
                     className="px-6 py-2  bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                 >
-                    Add
+                    {isAddAttendanceLoading ? "Loading ..." : "Add"}
                 </button>
             </div>
         </form>

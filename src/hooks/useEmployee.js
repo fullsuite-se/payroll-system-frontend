@@ -84,6 +84,7 @@ const useEmployee = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [showAddSalaryForm, setShowAddSalaryForm] = useState(false);
     const [isAddSalaryLoading, setIsAddSalaryLoading] = useState(false);
+    const [isAddEmployeeLoading, setIsAddEmployeeLoading] = useState(false);
 
     const { addToast } = useToastContext();
     const debouncedQuery = useDebounce(query, 800);
@@ -181,6 +182,7 @@ const useEmployee = () => {
     };
 
     const handleAddEmployees = async () => {
+        setIsAddEmployeeLoading(true);
         try {
             // Enhanced validation
             const validationResults = employeesFormData.map((emp, index) => ({
@@ -226,6 +228,8 @@ const useEmployee = () => {
                 }
             }
 
+
+
             // Update the form with only failed employees
             if (failedEmployees.length > 0) {
                 setEmployeesFormData(failedEmployees.map((emp, index) => ({ ...emp, id: Date.now() + index })));
@@ -239,6 +243,9 @@ const useEmployee = () => {
         } catch (error) {
             console.error('Error adding employees:', error);
             addToast("Failed to add employees", "error");
+        }
+        finally {
+            setIsAddEmployeeLoading(false);
         }
     };
 
@@ -504,6 +511,7 @@ const useEmployee = () => {
         handleResetForm,
         handleAddEmployees,
         uploadEmployeeFile,
+        isAddEmployeeLoading, setIsAddEmployeeLoading,
 
         //salary
         showAddSalaryForm, setShowAddSalaryForm,
