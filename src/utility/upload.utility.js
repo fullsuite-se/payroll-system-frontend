@@ -43,3 +43,47 @@ export const formatDateToISO18601 = (date) => {
     if (!date) return null;
     return date.toISOString().slice(0, 10);
 };
+
+export const parseExcelFile = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // Get first worksheet
+                const worksheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[worksheetName];
+
+                // Convert to JSON with headers
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                    header: 1,
+                    defval: '',
+                    blankrows: false
+                });
+
+                if (jsonData.length === 0) {
+                    reject(new Error('No data found in the Excel file'));
+                    return;
+                }
+
+                // Convert array format to object format
+                const headers = jsonData[0];
+                const rows = jsonData.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = row[index] || '';
+                    });
+                    return obj;
+                });
+
+                resolve(rows);
+            } catch (error) {
+                reject(error);
+            }
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsArrayBuffer(file);
+    });
+};
