@@ -34,7 +34,7 @@ export const column = [
                 ${info.getValue() == "PENDING" ? "bg-gray-300 text-gray-800" : ""}
                 ${info.getValue() == "ACCEPTED" ? "bg-green-100 text-green-700" : ""}
                 ${info.getValue() == "REJECTED" ? "bg-red-100 text-red-700" : ""}`}>
-                {info.getValue()}
+                {info.getValue().toLowerCase()}
             </span>
         ),
     },
