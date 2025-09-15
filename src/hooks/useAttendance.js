@@ -269,6 +269,8 @@ const useAttendance = () => {
                 // Reset form if all succeeded
                 handleResetForm();
                 await handleFetchAttendances(); // Refresh the list
+                //close modal
+                handleShowAttendanceModal();
             }
 
         } catch (error) {

@@ -236,6 +236,8 @@ const useEmployee = () => {
             } else {
                 // reset form if all succeeded
                 handleResetForm();
+                //close modal 
+                handleShowAddModal();
             }
 
             //reload employees

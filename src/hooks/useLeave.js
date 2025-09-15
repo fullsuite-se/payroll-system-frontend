@@ -118,6 +118,8 @@ const useLeave = () => {
             } else {
                 handleResetForm();
                 await handleFetchLeaves();
+                //close modal
+                handleShowLeaveModal();
             }
         } catch (error) {
             console.error('Error:', error);

@@ -113,6 +113,8 @@ const useAbsence = () => {
             else {
                 handleResetForm();
                 await handleFetchAbsences();
+                //close modal
+                handleShowAbsenceModal();
             }
         } catch (error) {
             console.error('Error adding absences:', error);

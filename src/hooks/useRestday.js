@@ -141,6 +141,8 @@ const useRestday = () => {
             } else {
                 handleResetForm();
                 await handleFetchRestdays();
+                //close modal
+                handleShowRestdayModal();
             }
         } catch (error) {
             console.log(error);

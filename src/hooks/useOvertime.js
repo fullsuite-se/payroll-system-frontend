@@ -138,6 +138,8 @@ const useOvertime = () => {
             } else {
                 handleResetForm();
                 await handleFetchOvertimes();
+                //close modal
+                handleShowOvertimeModal();
             }
         } catch (error) {
             console.error('Error:', error);
