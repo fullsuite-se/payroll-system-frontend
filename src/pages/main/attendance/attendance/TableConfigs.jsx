@@ -31,11 +31,6 @@ export const column = [
         header: "Hours Worked",
         cell: (info) => info.getValue(),
     },
-    // {
-    //     accessorKey: "hours_logged", //based on biometrics
-    //     header: "Hours Logged",
-    //     cell: (info) => info.getValue(),
-    // },
     {
         accessorKey: "undertime", //hours not completed
         header: "Undertime",
@@ -55,11 +50,10 @@ export const column = [
         accessorKey: "shift_type",
         header: "Shift Type",
         cell: (info) => (
-            <span className={`inline-block px-2 py-1 text-xs rounded-full ${info.getValue()
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-gray-300"
+            <span className={`inline-block px-2 py-1 text-xs rounded-full 
+                ${info.getValue() == "REGULAR" ? "bg-teal-100 text-teal-700" : "bg-orange-100 text-orange-700"
                 }`}>
-                {info.getValue() == "REGULAR" ? "Regular" : "SLIDE"}
+                {info.getValue() == "REGULAR" ? "Regular" : "Slide"}
             </span>
         ),
     },
