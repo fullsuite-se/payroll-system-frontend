@@ -22,6 +22,7 @@ const useTopNav = () => {
         "/attendance/leave": "Leave",
         "/attendance/absence": "Absence",
         "/attendance/restday": "Restday",
+        "/attendance/holiday": "Holiday",
         "/company": "Company",
     }
 
