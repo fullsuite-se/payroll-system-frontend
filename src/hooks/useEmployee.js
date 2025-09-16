@@ -97,8 +97,6 @@ const useEmployee = () => {
     const [salaryFormData, setSalaryFormData] = useState({ ...formData });
 
     useEffect(() => {
-        let ignore = false;
-
         const fetchEmployees = async () => {
             if (!employees.length) setIsEmployeesLoading(true);
             try {
@@ -109,17 +107,16 @@ const useEmployee = () => {
                     result = await fetchEmployeesByCompanyId(company.company_id);
                 }
 
-                if (!ignore) setEmployees(result.data.employees);
+                setEmployees(result.data.employees);
             } catch (error) {
                 console.error(error);
                 addToast("Failed to fetch employees", "error");
             } finally {
-                if (!ignore) setIsEmployeesLoading(false);
+                setIsEmployeesLoading(false);
             }
         };
 
         if (company) fetchEmployees();
-        return () => { ignore = true };
     }, [company, debouncedQuery]);
 
     const handleReloadEmployees = async () => {

@@ -7,7 +7,7 @@ import EmployeeCard from "./EmployeeCard";
 import EmployeeTable from "./EmployeeTable";
 
 const EmployeePage = () => {
-    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, handleChangeEmploymentStatus, uploadEmployeeFile, isUploading } = useEmployeeContext();
+    const { query, setQuery, employee, setEmployee, handleShowAddModal, showAddModal, showAddSalaryForm, setShowAddSalaryForm, handleChangeEmploymentStatus, uploadEmployeeFile, isUploading, isEmployeesLoading } = useEmployeeContext();
 
     return (
         <>
@@ -23,12 +23,10 @@ const EmployeePage = () => {
                 </div>
 
                 <div className="flex gap-4">
-                    {/* Table container - adjusts width based on whether card is open */}
-                    <div className={`transition-all duration-300 ${employee ? 'w-2/3' : 'w-full'
-                        }`}>
+                    <div className={`transition-all duration-300 ${employee ? 'w-2/3' : 'w-full'}`}>
+                        {/* Table container - adjusts width based on whether card is open */}
                         <EmployeeTable isCardOpen={!!employee} />
                     </div>
-
                     {/* Employee Card - slides in from right when opened */}
                     {employee && (
                         <div className="w-1/3 min-w-[350px]">

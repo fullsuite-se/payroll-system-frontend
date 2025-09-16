@@ -9,7 +9,7 @@ const AbsenceContext = createContext();
 export const AbsenceProvider = ({ children }) => {
     const absence = useAbsence();
 
-    if (absence.isAbsencesLoading) return null;
+    // if (absence.isAbsencesLoading) return null;
 
     return (
         <AbsenceContext.Provider value={{ ...absence }} >

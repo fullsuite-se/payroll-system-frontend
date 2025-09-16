@@ -9,7 +9,7 @@ const AttendanceContext = createContext();
 export const AttendanceProvider = ({ children }) => {
     const attendance = useAttendance();
 
-    if (attendance.isAttendancesLoading) return null;
+    // if (attendance.isAttendancesLoading) return null;
 
     return (
         <AttendanceContext.Provider value={{ ...attendance }}>

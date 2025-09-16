@@ -8,7 +8,6 @@ const OvertimeContext = createContext();
 export const OvertimeProvider = ({ children }) => {
     const overtime = useOvertime();
 
-    if (overtime.isOvertimesLoading) return null;
 
     return (
         <OvertimeContext.Provider value={{ ...overtime }} >

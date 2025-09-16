@@ -10,7 +10,7 @@ export const EmployeeProvider = ({ children }) => {
 
     //wait for employee to load
     //TODO :  add a wait here
-    if (employee.isEmployeesLoading) return null;
+    // if (employee.isEmployeesLoading) return null;
 
     return (
         <EmployeeContext.Provider value={{ ...employee }} >

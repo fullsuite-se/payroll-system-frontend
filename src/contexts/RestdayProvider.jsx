@@ -9,7 +9,7 @@ const RestdayContext = createContext();
 export const RestdayProvider = ({ children }) => {
     const restday = useRestday();
 
-    if (restday.isRestdaysLoading) return null;
+    // if (restday.isRestdaysLoading) return null;
 
     return (
         <RestdayContext.Provider value={{ ...restday }} >

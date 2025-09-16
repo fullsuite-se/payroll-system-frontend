@@ -8,7 +8,7 @@ const LeaveContext = createContext();
 export const LeaveProvider = ({ children }) => {
     const leave = useLeave();
 
-    if (leave.isLeavesLoading) return null;
+    // if (leave.isLeavesLoading) return null;
 
     return (
         <LeaveContext.Provider value={{ ...leave }} >
