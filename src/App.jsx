@@ -25,6 +25,7 @@ import { OvertimeProvider } from "./contexts/OvertimeProvider"
 import { LeaveProvider } from "./contexts/LeaveProvider"
 import { AbsenceProvider } from "./contexts/AbsenceProvider"
 import { RestdayProvider } from "./contexts/RestdayProvider"
+import HolidayPage from "./pages/main/attendance/holiday/HolidayPage"
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
                               <Route path="/attendance/leave" element={<LeavePage />} />
                               <Route path="/attendance/overtime" element={<OvertimePage />} />
                               <Route path="/attendance/restday" element={<RestdayPage />} />
+                              <Route path="/attendance/holiday" element={<HolidayPage />} />
                             </Route>
                           </Route>
                         </Routes>

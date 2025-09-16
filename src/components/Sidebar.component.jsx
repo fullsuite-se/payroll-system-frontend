@@ -39,6 +39,7 @@ const Sidebar = () => {
                 { label: "Leave", path: "/attendance/leave" },
                 { label: "Absence", path: "/attendance/absence" },
                 { label: "Restday", path: "/attendance/restday" },
+                { label: "Holiday", path: "/attendance/holiday" },
             ],
         },
         {
