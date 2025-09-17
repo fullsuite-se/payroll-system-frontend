@@ -1,5 +1,6 @@
 import AddModal from "../../../../components/AddModal";
 import DailyRecordFilter from "../../../../components/DailyRecordFilter";
+import DualBallLoading from "../../../../components/DualBallLoading";
 import TanStackTable from "../../../../components/TanStackTable";
 import { useAttendanceContext } from "../../../../contexts/AttendanceProvider";
 import AttendanceForm from "./AttendanceForm";
@@ -8,9 +9,7 @@ import { column } from "./TableConfigs";
 const AttendancePage = () => {
     const { attendances, isAttendancesLoading, handleRowClick, handleShowAttendanceModal,
         showAttendanceModal, isUploading, uploadAttendanceFile, handleDeleteOneAttendance,
-        filters, setFilters, handleResetFilter, handleFilterChange, } = useAttendanceContext();
-
-    if (isAttendancesLoading) return <div>Loading ...</div>;
+        filters, handleResetFilter, handleFilterChange, } = useAttendanceContext();
 
     return (
         <>
@@ -24,12 +23,16 @@ const AttendancePage = () => {
                     />
                 </div>
                 <div className="w-full">
-                    <TanStackTable
-                        data={attendances}
-                        columns={column}
-                        onRowClick={handleRowClick}
-                        onDelete={handleDeleteOneAttendance}
-                    />
+                    {
+                        isAttendancesLoading
+                            ? <DualBallLoading />
+                            : <TanStackTable
+                                data={attendances}
+                                columns={column}
+                                onRowClick={handleRowClick}
+                                onDelete={handleDeleteOneAttendance}
+                            />
+                    }
                 </div>
             </div>
             {showAttendanceModal

@@ -5,6 +5,7 @@ import { useToastContext } from "../contexts/ToastProvider";
 import { addOneAttendance, deleteAttendance, fetchAttendances } from "../services/attendance.service";
 import * as XLSX from 'xlsx';
 import { formatDateTime, formatDateToISO18601, normalizeHeader, parseExcelDateTime, parseExcelFile } from "../utility/upload.utility";
+import useDebounce from "./useDebounce";
 
 const formData = {
     employee_id: '',
@@ -39,36 +40,45 @@ const useAttendance = () => {
         id: Date.now(), ...formData
     }]);
 
-
-
     const { employee } = useEmployeeContext();
     const { company } = useCompanyContext();
     const { addToast } = useToastContext();
+
+    const debouncedQuery_employee_id = useDebounce(filters.employee_id, 800);
+    const debouncedQuery_to = useDebounce(filters.to, 800);
+    const debouncedQuery_from = useDebounce(filters.from, 800);
 
     const handleFetchAttendances = async () => {
         setIsAttendancesLoading(true);
 
         try {
-            const result = await fetchAttendances(company.company_id);
+            // Always call fetchAttendances with all parameters
+            // The service will handle which ones to include in the query
+            const result = await fetchAttendances(
+                company.company_id,
+                debouncedQuery_employee_id || null,
+                debouncedQuery_from || null,
+                debouncedQuery_to || null
+            );
+
             setAttendances(result.data.attendances);
         } catch (error) {
             console.error(error);
             addToast("Failed to fetch attendances", "error");
-        }
-        finally {
+        } finally {
             setIsAttendancesLoading(false);
         }
-    };
-
-    const handleRowClick = (data, row) => {
-        console.log('clicked: ', data);
     };
 
     useEffect(() => {
         if (!company) return;
 
         handleFetchAttendances();
-    }, [company]);
+    }, [company, debouncedQuery_employee_id, debouncedQuery_to, debouncedQuery_from]);
+
+    const handleRowClick = (data, row) => {
+        console.log('clicked: ', data);
+    };
 
     const handleShowAttendanceModal = () => {
         setShowAttendanceModal(!showAttendanceModal);
@@ -304,12 +314,12 @@ const useAttendance = () => {
         }
     }
 
-    //reset fielter
+    //reset filter
     const handleResetFilter = () => {
         setFilters({ ...filterFields });
     };
 
-    //handleChange fieldter
+    //handleChange filter
     const handleFilterChange = (field, value) => {
         setFilters(prev => ({
             ...prev,
