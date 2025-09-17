@@ -1,7 +1,9 @@
+import PayrunFilter from "./PayrunFilter";
+
 const PayrunPage = () => {
     return (
-        <div>
-            This is payrun page
+        <div className="w-full max-w-full">
+            <PayrunFilter />
         </div>
     )
 };
