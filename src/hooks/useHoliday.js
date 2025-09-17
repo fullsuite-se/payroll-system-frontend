@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useCompanyContext } from "../contexts/CompanyProvider";
 import { useToastContext } from "../contexts/ToastProvider";
-import { addOneHoliday, deleteOneHoliday, fetchHolidays } from "../services/holiday.service";
+import { addOneHoliday, deleteOneHoliday, fetchEmployeesAttendanceOnHoliday, fetchHolidays, updateOneHoliday } from "../services/holiday.service";
 import { convertToISO8601 } from "../utility/datetime.utility";
 
 const initialFormData = {
@@ -16,9 +16,14 @@ const useHoliday = () => {
     const [selectedHoliday, setSelectedHoliday] = useState(null);
     const [holidaysLoading, setHolidaysLoading] = useState(false);
     const [showAddHoliday, setShowAddHoliday] = useState(false);
+    const [showUpdateHoliday, setShowUpdateHoliday] = useState(false); // Added separate state for update modal
     const [holidayFormData, setHolidayFormData] = useState(initialFormData);
     const [addLoading, setAddLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(null);
+    const [attendances, setAttendances] = useState([]);
+    const [attendancesLoading, setAttendancesLoading] = useState(false);
+    const [updateHolidayFormData, setUpdateHolidayFormData] = useState(initialFormData); // Initialize with initialFormData
+    const [updateLoading, setUpdateLoading] = useState(false);
 
     const { company } = useCompanyContext();
     const { addToast } = useToastContext();
@@ -38,9 +43,38 @@ const useHoliday = () => {
         }
     }, [company, addToast]);
 
+    const handleFetchEmployeesAttendanceOnHoliday = async () => {
+        setAttendancesLoading(true);
+        try {
+            const result = await fetchEmployeesAttendanceOnHoliday(company.company_id, selectedHoliday.holiday_date);
+            console.log('holiday att: ', result);
+
+            setAttendances(result.data.attendances);
+        } catch (error) {
+            console.error('Failed to fetch attendances:', error);
+            addToast("Failed to fetch employees attendance on holiday", "error");
+        }
+        finally {
+            setAttendancesLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!selectedHoliday) return;
+
+        handleFetchEmployeesAttendanceOnHoliday();
+    }, [selectedHoliday])
+
     useEffect(() => {
         handleFetchHolidays();
     }, [handleFetchHolidays]);
+
+    //populate the update form if there is a selected
+    useEffect(() => {
+        if (!selectedHoliday) return;
+
+        setUpdateHolidayFormData({ ...selectedHoliday });
+    }, [selectedHoliday]);
 
     const handleChangeSelectedHoliday = (holiday) => {
         setSelectedHoliday(holiday);
@@ -52,6 +86,21 @@ const useHoliday = () => {
         if (showAddHoliday) {
             setHolidayFormData(initialFormData);
         }
+    };
+
+    // Added separate handler for update modal
+    const handleShowUpdateHolidayModal = () => {
+        setShowUpdateHoliday(prev => !prev);
+        // Reset form when closing modal
+        if (showUpdateHoliday) {
+            setUpdateHolidayFormData(initialFormData);
+        }
+    };
+
+    // Added handler to open update modal with selected holiday
+    const handleEditHoliday = (holiday) => {
+        setSelectedHoliday(holiday);
+        setShowUpdateHoliday(true);
     };
 
     const handleFormChange = (field, value) => {
@@ -101,20 +150,68 @@ const useHoliday = () => {
         }
     };
 
+    const handleUpdateFormChange = (field, value) => {
+        setUpdateHolidayFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    const handleUpdateHoliday = async () => {
+        setUpdateLoading(true);
+
+        try {
+            const payload = {
+                ...updateHolidayFormData,
+                holiday_date: convertToISO8601(updateHolidayFormData.holiday_date),
+                holiday_rate: Number(updateHolidayFormData.holiday_rate),
+            };
+            await updateOneHoliday(company.company_id, selectedHoliday.company_holiday_id, payload);
+
+            // Added success handling
+            addToast("Holiday updated successfully", "success");
+            setShowUpdateHoliday(false);
+            await handleFetchHolidays();
+
+            // Update selected holiday with new data
+            setSelectedHoliday(prev => ({ ...prev, ...payload }));
+
+        } catch (error) {
+            console.log(error);
+            addToast(error.response?.data?.message || "Failed to update holiday", "error");
+        }
+        finally {
+            setUpdateLoading(false);
+        }
+    };
+
     return {
         holidays,
         selectedHoliday,
         holidaysLoading,
         showAddHoliday,
+        showUpdateHoliday, // Added to return
         holidayFormData,
         addLoading,
         deleteLoading,
         handleChangeSelectedHoliday,
         handleShowAddHolidayModal,
+        handleShowUpdateHolidayModal, // Added to return
+        handleEditHoliday, // Added to return
         handleAddHoliday,
         handleFormChange,
         handleDeleteHoliday,
         handleFetchHolidays,
+        attendances,
+        setAttendances,
+        attendancesLoading,
+        setAttendancesLoading,
+        handleFetchEmployeesAttendanceOnHoliday,
+        handleUpdateFormChange,
+        updateHolidayFormData,
+        setUpdateHolidayFormData,
+        handleUpdateHoliday,
+        updateLoading,
     };
 };
 

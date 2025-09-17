@@ -1,4 +1,5 @@
 import payroll_api from "../configs/payroll_api.config";
+import { convertToISO8601 } from "../utility/datetime.utility";
 
 export const fetchHolidays = async (company_id, employee_id = null, from = null, to = null) => {
     let query = '';
@@ -13,6 +14,13 @@ export const fetchHolidays = async (company_id, employee_id = null, from = null,
     }
 
     return await payroll_api.get(`/api/v1/daily-records/companies/${company_id}/holidays?${query}`);
+};
+
+
+
+export const fetchEmployeesAttendanceOnHoliday = async (company_id, date) => {
+
+    return await payroll_api.get(`/api/v1/daily-records/companies/${company_id}/holidays/employee-attendances?date=${convertToISO8601(date)}`); //convert into YY-MM-DD format. 
 };
 
 export const addOneHoliday = async (company_id, formData) => {
