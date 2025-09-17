@@ -20,6 +20,12 @@ const formData = {
     shift_type: 'REGULAR',
 };
 
+const filterFields = {
+    employee_id: '',
+    from: '',
+    to: '',
+}
+
 const useAttendance = () => {
     const [attendances, setAttendances] = useState([]);
     const [attendance, setAttendance] = useState();
@@ -28,9 +34,11 @@ const useAttendance = () => {
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [isAddAttendanceLoading, setIsAddAttendanceLoading] = useState(false);
+    const [filters, setFilters] = useState({ ...filterFields });
     const [attendanceFormData, setAttendanceFormData] = useState([{
         id: Date.now(), ...formData
     }]);
+
 
 
     const { employee } = useEmployeeContext();
@@ -296,6 +304,19 @@ const useAttendance = () => {
         }
     }
 
+    //reset fielter
+    const handleResetFilter = () => {
+        setFilters({ ...filterFields });
+    };
+
+    //handleChange fieldter
+    const handleFilterChange = (field, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
     return {
         attendances, setAttendances,
         attendance, setAttendance,
@@ -316,7 +337,11 @@ const useAttendance = () => {
         handleAddAttendances,
 
         //delete 
-        handleDeleteOneAttendance
+        handleDeleteOneAttendance,
+
+        //filter
+        filters, setFilters,
+        handleResetFilter, handleFilterChange,
     };
 };
 

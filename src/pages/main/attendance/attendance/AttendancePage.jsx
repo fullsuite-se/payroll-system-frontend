@@ -6,7 +6,9 @@ import AttendanceForm from "./AttendanceForm";
 import { column } from "./TableConfigs";
 
 const AttendancePage = () => {
-    const { attendances, isAttendancesLoading, handleRowClick, handleShowAttendanceModal, showAttendanceModal, isUploading, uploadAttendanceFile, handleDeleteOneAttendance } = useAttendanceContext();
+    const { attendances, isAttendancesLoading, handleRowClick, handleShowAttendanceModal,
+        showAttendanceModal, isUploading, uploadAttendanceFile, handleDeleteOneAttendance,
+        filters, setFilters, handleResetFilter, handleFilterChange, } = useAttendanceContext();
 
     if (isAttendancesLoading) return <div>Loading ...</div>;
 
@@ -16,6 +18,9 @@ const AttendancePage = () => {
                 <div className="pb-4">
                     <DailyRecordFilter
                         onClickAdd={handleShowAttendanceModal}
+                        filters={filters}
+                        onChangeFilter={handleFilterChange}
+                        resetFilter={handleResetFilter}
                     />
                 </div>
                 <div className="w-full">
