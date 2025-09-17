@@ -41,8 +41,8 @@ const DailyRecordFilter = ({ onClickAdd, filters, onChangeFilter, resetFilter })
                     />
                 </div>
 
-                <div className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-red-500" onClick={resetFilter}>
-                    <XCircleIcon className="h-4 w-4s" />
+                <div className="flex flex-row items-center gap-1 hover:cursor-pointer" onClick={resetFilter}>
+                    <XCircleIcon className="h-4 w-4 text-gray-400  hover:text-red-500" />
                 </div>
 
 

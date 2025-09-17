@@ -13,7 +13,11 @@ const RestdayPage = () => {
         handleDeleteOneRestday,
         showRestdayModal,
         uploadRestdayFile,
-        isUploading
+        isUploading,
+
+        //filter
+        filters,
+        handleResetFilter, handleFilterChange,
     } = useRestdayContext();
 
     return (
@@ -22,6 +26,9 @@ const RestdayPage = () => {
                 <div className="pb-4">
                     <DailyRecordFilter
                         onClickAdd={handleShowRestdayModal}
+                        filters={filters}
+                        resetFilter={handleResetFilter}
+                        onChangeFilter={handleFilterChange}
                     />
                 </div>
                 <div className="w-full">

@@ -13,7 +13,9 @@ const LeavePage = () => {
         handleDeleteOneLeave,
         showLeaveModal,
         uploadLeaveFile,
-        isUploading
+        isUploading,
+        filters,
+        handleResetFilter, handleFilterChange,
     } = useLeaveContext();
 
     return (
@@ -22,6 +24,9 @@ const LeavePage = () => {
                 <div className="pb-4">
                     <DailyRecordFilter
                         onClickAdd={handleShowLeaveModal}
+                        filters={filters}
+                        onChangeFilter={handleFilterChange}
+                        resetFilter={handleResetFilter}
                     />
                 </div>
                 <div className="w-full">

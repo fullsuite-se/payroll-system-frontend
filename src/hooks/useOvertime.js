@@ -14,6 +14,12 @@ const formData = {
     overtime_status: 'PENDING',
 };
 
+const filterFields = {
+    employee_id: '',
+    from: '',
+    to: '',
+}
+
 const useOvertime = () => {
     const [overtimes, setOvertimes] = useState([]);
     const [overtime, setOvertime] = useState();
@@ -25,6 +31,8 @@ const useOvertime = () => {
         id: Date.now(),
         ...formData
     }]);
+    const [filters, setFilters] = useState({ ...filterFields });
+
 
     // Contexts
     const { company } = useCompanyContext();
@@ -294,6 +302,18 @@ const useOvertime = () => {
         console.log('clicked: ', data);
     }
 
+    //reset fielter
+    const handleResetFilter = () => {
+        setFilters({ ...filterFields });
+    };
+
+    //handleChange fieldter
+    const handleFilterChange = (field, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
 
     return {
         // State
@@ -331,7 +351,11 @@ const useOvertime = () => {
         uploadOvertimeFile,
 
         //onclick
-        handleRowClick
+        handleRowClick,
+
+        //filter
+        filters, setFilters,
+        handleResetFilter, handleFilterChange,
     };
 };
 

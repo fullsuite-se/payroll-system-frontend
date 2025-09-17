@@ -13,14 +13,21 @@ const AbsencePage = () => {
         handleDeleteAbsence,
         showAbsenceModal,
         uploadAbsenceFile,
-        isUploading
+        isUploading,
+        filters,
+        handleResetFilter, handleFilterChange,
     } = useAbsenceContext();
 
     return (
         <>
             <div className="w-full max-w-full">
                 <div className="pb-4">
-                    <DailyRecordFilter onClickAdd={handleShowAbsenceModal} />
+                    <DailyRecordFilter
+                        onClickAdd={handleShowAbsenceModal}
+                        filters={filters}
+                        onChangeFilter={handleFilterChange}
+                        resetFilter={handleResetFilter}
+                    />
                 </div>
                 <div className="w-full">
                     <TanStackTable

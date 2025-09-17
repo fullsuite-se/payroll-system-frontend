@@ -13,6 +13,13 @@ const formData = {
     is_paid: false,
 };
 
+
+const filterFields = {
+    employee_id: '',
+    from: '',
+    to: '',
+}
+
 const useLeave = () => {
     const [leaves, setLeaves] = useState([]);
     const [leave, setLeave] = useState();
@@ -24,6 +31,8 @@ const useLeave = () => {
         id: Date.now(),
         ...formData
     }]);
+    const [filters, setFilters] = useState({ ...filterFields });
+
 
     // Contexts
     const { addToast } = useToastContext();
@@ -267,6 +276,20 @@ const useLeave = () => {
         console.log('clicked: ', data);
     };
 
+
+    //reset fielter
+    const handleResetFilter = () => {
+        setFilters({ ...filterFields });
+    };
+
+    //handleChange fieldter
+    const handleFilterChange = (field, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
     return {
         // State
         leaves,
@@ -303,7 +326,11 @@ const useLeave = () => {
         uploadLeaveFile,
 
         // onClick
-        handleRowClick
+        handleRowClick,
+
+        //filter
+        filters, setFilters,
+        handleResetFilter, handleFilterChange,
     };
 };
 

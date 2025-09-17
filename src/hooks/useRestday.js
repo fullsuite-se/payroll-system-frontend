@@ -18,6 +18,12 @@ const formData = {
     shift_type: 'REGULAR',
 };
 
+const filterFields = {
+    employee_id: '',
+    from: '',
+    to: '',
+};
+
 
 const useRestday = () => {
     const [restdays, setRestdays] = useState([]);
@@ -29,6 +35,8 @@ const useRestday = () => {
     const [restdayFormData, setRestdayFormData] = useState([{
         id: Date.now(), ...formData
     }]);
+    const [filters, setFilters] = useState({ ...filterFields });
+
 
     const { company } = useCompanyContext();
     const { addToast } = useToastContext();
@@ -287,6 +295,19 @@ const useRestday = () => {
         }
     };
 
+    //reset fielter
+    const handleResetFilter = () => {
+        setFilters({ ...filterFields });
+    };
+
+    //handleChange fieldter
+    const handleFilterChange = (field, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
 
     return {
         restdays, setRestdays,
@@ -307,6 +328,10 @@ const useRestday = () => {
         //upload
         uploadRestdayFile,
         isUploading, setIsUploading,
+
+        //filter
+        filters, setFilters,
+        handleResetFilter, handleFilterChange,
     };
 };
 

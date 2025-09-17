@@ -12,6 +12,12 @@ const formData = {
     is_paid: false,
 };
 
+const filterFields = {
+    employee_id: '',
+    from: '',
+    to: '',
+}
+
 const useAbsence = () => {
     const [absences, setAbsences] = useState([]);
     const [absence, setAbsence] = useState();
@@ -22,6 +28,8 @@ const useAbsence = () => {
     const [absencesFormData, setAbsencesFormData] = useState([
         { id: Date.now(), ...formData }
     ]);
+    const [filters, setFilters] = useState({ ...filterFields });
+
 
     const { company } = useCompanyContext();
     const { addToast } = useToastContext();
@@ -256,6 +264,19 @@ const useAbsence = () => {
         }
     };
 
+    //reset fielter
+    const handleResetFilter = () => {
+        setFilters({ ...filterFields });
+    };
+
+    //handleChange fieldter
+    const handleFilterChange = (field, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
     return {
         // State
         absences,
@@ -293,7 +314,11 @@ const useAbsence = () => {
         uploadAbsenceFile,
 
         // Row click
-        handleRowClick
+        handleRowClick,
+
+        //filter
+        filters, setFilters,
+        handleResetFilter, handleFilterChange,
     };
 };
 

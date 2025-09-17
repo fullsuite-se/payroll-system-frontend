@@ -6,7 +6,13 @@ import OvertimeForm from "./OvertimeForm";
 import { column } from "./TableConfigs";
 
 const OvertimePage = () => {
-    const { handleShowOvertimeModal, overtimes, handleRowClick, handleDeleteOneOvertime, showOvertimeModal, uploadOvertimeFile, isUploading } = useOvertimeContext();
+    const { handleShowOvertimeModal, overtimes, handleRowClick,
+        handleDeleteOneOvertime, showOvertimeModal, uploadOvertimeFile,
+        isUploading,
+        //filter
+        filters,
+        handleResetFilter, handleFilterChange,
+    } = useOvertimeContext();
     return (
 
         <>
@@ -14,6 +20,9 @@ const OvertimePage = () => {
                 <div className="pb-4">
                     <DailyRecordFilter
                         onClickAdd={handleShowOvertimeModal}
+                        filters={filters}
+                        resetFilter={handleResetFilter}
+                        onChangeFilter={handleFilterChange}
                     />
                 </div>
                 <div className="w-full">
