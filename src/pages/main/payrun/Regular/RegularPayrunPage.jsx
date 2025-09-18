@@ -1,8 +1,14 @@
+import PayrunOption from "./PayrunOption";
+
 const RegularPayrunPage = () => {
     return (
-        <div>
-            This is regularpayrun page
-        </div>
+        <>
+            <div className="w-full max-w-full">
+                <div className="pb-4">
+                    <PayrunOption />
+                </div>
+            </div>
+        </>
     )
 };
 

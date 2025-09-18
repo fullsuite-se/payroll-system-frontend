@@ -28,6 +28,7 @@ import LastPayrunPage from "./pages/main/payrun/last/LastPayrunPage"
 import SpecialPayrunPage from "./pages/main/payrun/special/SpecialPayrunPage"
 import RegularPayrunPage from "./pages/main/payrun/Regular/RegularPayrunPage"
 import { PayitemProvider } from "./contexts/PayitemProvider"
+import { RegularPayrunProvider } from "./contexts/RegularPayrunProvider"
 
 function App() {
   return (
@@ -43,37 +44,39 @@ function App() {
                       <RestdayProvider>
                         <HolidayProvider>
                           <PayitemProvider >
-                            <Routes>
-                              {/* Public routes */}
-                              <Route path="/" element={<HomePage />} />
-                              {/* Navitate to Dasboard if there's token */}
-                              <Route element={<PublicRoute />}>
-                                <Route path="/auth/login" element={<LoginPage />} />
-                              </Route>
-
-                              {/* Protected routes with MainLayout */}
-                              <Route element={<MainLayout />}>
-                                <Route element={<ProtectedRoute />} >
-                                  <Route path="/dashboard" element={<DashboardPage />} />
-
-                                  <Route path="/payrun" element={<PayrunPage />} />
-                                  <Route path="/payrun/regular" element={< RegularPayrunPage />} />
-                                  <Route path="/payrun/special" element={<SpecialPayrunPage />} />
-                                  <Route path="/payrun/last" element={<LastPayrunPage />} />
-
-                                  <Route path="/employee" element={<EmployeePage />} />
-
-                                  <Route path="/company" element={<CompanyPage />} />
-
-                                  <Route path="/attendance" element={<AttendancePage />} />
-                                  <Route path="/attendance/absence" element={<AbsencePage />} />
-                                  <Route path="/attendance/leave" element={<LeavePage />} />
-                                  <Route path="/attendance/overtime" element={<OvertimePage />} />
-                                  <Route path="/attendance/restday" element={<RestdayPage />} />
-                                  <Route path="/attendance/holiday" element={<HolidayPage />} />
+                            <RegularPayrunProvider>
+                              <Routes>
+                                {/* Public routes */}
+                                <Route path="/" element={<HomePage />} />
+                                {/* Navitate to Dasboard if there's token */}
+                                <Route element={<PublicRoute />}>
+                                  <Route path="/auth/login" element={<LoginPage />} />
                                 </Route>
-                              </Route>
-                            </Routes>
+
+                                {/* Protected routes with MainLayout */}
+                                <Route element={<MainLayout />}>
+                                  <Route element={<ProtectedRoute />} >
+                                    <Route path="/dashboard" element={<DashboardPage />} />
+
+                                    <Route path="/payrun" element={<PayrunPage />} />
+                                    <Route path="/payrun/regular" element={< RegularPayrunPage />} />
+                                    <Route path="/payrun/special" element={<SpecialPayrunPage />} />
+                                    <Route path="/payrun/last" element={<LastPayrunPage />} />
+
+                                    <Route path="/employee" element={<EmployeePage />} />
+
+                                    <Route path="/company" element={<CompanyPage />} />
+
+                                    <Route path="/attendance" element={<AttendancePage />} />
+                                    <Route path="/attendance/absence" element={<AbsencePage />} />
+                                    <Route path="/attendance/leave" element={<LeavePage />} />
+                                    <Route path="/attendance/overtime" element={<OvertimePage />} />
+                                    <Route path="/attendance/restday" element={<RestdayPage />} />
+                                    <Route path="/attendance/holiday" element={<HolidayPage />} />
+                                  </Route>
+                                </Route>
+                              </Routes>
+                            </RegularPayrunProvider>
                           </PayitemProvider>
                         </HolidayProvider>
                       </RestdayProvider>
