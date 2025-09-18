@@ -3,9 +3,6 @@ import LoginPage from "./pages/auth/LoginPage"
 import DashboardPage from "./pages/main/dashboard/Dashboard.page"
 import HomePage from "./pages/home/HomePage"
 import MainLayout from "./layouts/MainLayout"
-import RegularPayrunPage from "./pages/main/payrun/Regular/RegularPayrunPage"
-import SpecialPayrunPage from "./pages/main/payrun/Special/SpecialPayrunPage"
-import LastPayrunPage from "./pages/main/payrun/Last/LastPayrunPage"
 import PayrunPage from "./pages/main/payrun/payrun/PayrunPage"
 import AttendancePage from "./pages/main/attendance/attendance/AttendancePage"
 import AbsencePage from "./pages/main/attendance/absence/AbsencePage"
@@ -27,6 +24,9 @@ import { AbsenceProvider } from "./contexts/AbsenceProvider"
 import { RestdayProvider } from "./contexts/RestdayProvider"
 import HolidayPage from "./pages/main/attendance/holiday/HolidayPage"
 import { HolidayProvider } from "./contexts/HolidayProvider"
+import LastPayrunPage from "./pages/main/payrun/last/LastPayrunPage"
+import SpecialPayrunPage from "./pages/main/payrun/special/SpecialPayrunPage"
+import RegularPayrunPage from "./pages/main/payrun/Regular/RegularPayrunPage"
 
 function App() {
   return (
@@ -55,7 +55,7 @@ function App() {
                                 <Route path="/dashboard" element={<DashboardPage />} />
 
                                 <Route path="/payrun" element={<PayrunPage />} />
-                                <Route path="/payrun/regular" element={<RegularPayrunPage />} />
+                                <Route path="/payrun/regular" element={< RegularPayrunPage />} />
                                 <Route path="/payrun/special" element={<SpecialPayrunPage />} />
                                 <Route path="/payrun/last" element={<LastPayrunPage />} />
 
@@ -82,7 +82,7 @@ function App() {
           </CompanyProvider>
         </UserProvider>
       </ToastProvider>
-    </BrowserRouter>
+    </BrowserRouter >
   )
 }
 
