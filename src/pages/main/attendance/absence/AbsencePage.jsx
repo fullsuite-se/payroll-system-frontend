@@ -1,5 +1,6 @@
 import AddModal from "../../../../components/AddModal";
 import DailyRecordFilter from "../../../../components/DailyRecordFilter";
+import DualBallLoading from "../../../../components/DualBallLoading";
 import TanStackTable from "../../../../components/TanStackTable";
 import { useAbsenceContext } from "../../../../contexts/AbsenceProvider";
 import AbsenceForm from "./AbsenceForm";
@@ -16,6 +17,7 @@ const AbsencePage = () => {
         isUploading,
         filters,
         handleResetFilter, handleFilterChange,
+        isAbsencesLoading,
     } = useAbsenceContext();
 
     return (
@@ -30,12 +32,16 @@ const AbsencePage = () => {
                     />
                 </div>
                 <div className="w-full">
-                    <TanStackTable
-                        data={absences}
-                        columns={column}
-                        onRowClick={handleRowClick}
-                        onDelete={handleDeleteAbsence}
-                    />
+                    {
+                        isAbsencesLoading
+                            ? <DualBallLoading />
+                            : <TanStackTable
+                                data={absences}
+                                columns={column}
+                                onRowClick={handleRowClick}
+                                onDelete={handleDeleteAbsence}
+                            />
+                    }
                 </div>
             </div>
             {showAbsenceModal && (

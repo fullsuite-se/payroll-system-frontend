@@ -4,6 +4,7 @@ import { useToastContext } from "../contexts/ToastProvider";
 import { addOneOvertime, deleteOneOvertime, fetchOvertimes } from "../services/overtime.service";
 import * as XLSX from 'xlsx';
 import { formatDateToISO18601, normalizeHeader, parseExcelDateTime, parseExcelFile } from "../utility/upload.utility";
+import useDebounce from "./useDebounce";
 
 const formData = {
     employee_id: '',
@@ -33,6 +34,10 @@ const useOvertime = () => {
     }]);
     const [filters, setFilters] = useState({ ...filterFields });
 
+    const debouncedQuery_employee_id = useDebounce(filters.employee_id, 800);
+    const debouncedQuery_to = useDebounce(filters.to, 800);
+    const debouncedQuery_from = useDebounce(filters.from, 800);
+
 
     // Contexts
     const { company } = useCompanyContext();
@@ -45,10 +50,12 @@ const useOvertime = () => {
 
 
         try {
-            const result = await fetchOvertimes(company.company_id);
-            console.log('overtimes', result);
-
-            // Fixed: Set overtimes, not overtime
+            const result = await fetchOvertimes(
+                company.company_id,
+                debouncedQuery_employee_id || null,
+                debouncedQuery_from || null,
+                debouncedQuery_to || null
+            );
             setOvertimes(result.data.overtimes);
         } catch (error) {
             console.error(error);
@@ -63,7 +70,7 @@ const useOvertime = () => {
         if (!company) return;
 
         handleFetchOvertimes();
-    }, [company]); // Fixed: Added dependency array
+    }, [company, debouncedQuery_employee_id, debouncedQuery_to, debouncedQuery_from]); // Fixed: Added dependency array
 
     // Modal related function
     const handleShowOvertimeModal = () => {

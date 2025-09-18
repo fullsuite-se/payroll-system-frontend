@@ -1,5 +1,6 @@
 import AddModal from "../../../../components/AddModal";
 import DailyRecordFilter from "../../../../components/DailyRecordFilter";
+import DualBallLoading from "../../../../components/DualBallLoading";
 import TanStackTable from "../../../../components/TanStackTable";
 import { useOvertimeContext } from "../../../../contexts/OvertimeProvider";
 import OvertimeForm from "./OvertimeForm";
@@ -12,6 +13,7 @@ const OvertimePage = () => {
         //filter
         filters,
         handleResetFilter, handleFilterChange,
+        isOvertimesLoading,
     } = useOvertimeContext();
     return (
 
@@ -26,12 +28,16 @@ const OvertimePage = () => {
                     />
                 </div>
                 <div className="w-full">
-                    <TanStackTable
-                        data={overtimes}
-                        columns={column}
-                        onRowClick={handleRowClick}
-                        onDelete={handleDeleteOneOvertime}
-                    />
+                    {
+                        isOvertimesLoading
+                            ? <DualBallLoading />
+                            : <TanStackTable
+                                data={overtimes}
+                                columns={column}
+                                onRowClick={handleRowClick}
+                                onDelete={handleDeleteOneOvertime}
+                            />
+                    }
                 </div>
             </div>
             {showOvertimeModal

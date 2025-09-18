@@ -4,6 +4,7 @@ import { useCompanyContext } from "../contexts/CompanyProvider";
 import { deleteOneLeave, fetchLeaves, addOneLeave } from "../services/leave.service";
 import * as XLSX from 'xlsx';
 import { formatDateToISO18601, normalizeHeader, parseExcelDateTime, parseExcelFile } from "../utility/upload.utility";
+import useDebounce from "./useDebounce";
 
 const formData = {
     employee_id: '',
@@ -33,6 +34,10 @@ const useLeave = () => {
     }]);
     const [filters, setFilters] = useState({ ...filterFields });
 
+    const debouncedQuery_employee_id = useDebounce(filters.employee_id, 800);
+    const debouncedQuery_to = useDebounce(filters.to, 800);
+    const debouncedQuery_from = useDebounce(filters.from, 800);
+
 
     // Contexts
     const { addToast } = useToastContext();
@@ -42,8 +47,13 @@ const useLeave = () => {
         setIsLeavesLoading(true);
 
         try {
-            const result = await fetchLeaves(company.company_id);
-            console.log('leaves', result);
+            const result = await fetchLeaves(
+                company.company_id,
+                debouncedQuery_employee_id || null,
+                debouncedQuery_from || null,
+                debouncedQuery_to || null
+            );
+
             setLeaves(result.data.leaves);
         } catch (error) {
             console.error(error);
@@ -57,7 +67,7 @@ const useLeave = () => {
         if (!company) return;
 
         handleFetchLeaves();
-    }, [company]);
+    }, [company, debouncedQuery_employee_id, debouncedQuery_to, debouncedQuery_from]);
 
     // Modal related function
     const handleShowLeaveModal = () => {

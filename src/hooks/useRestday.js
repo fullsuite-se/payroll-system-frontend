@@ -3,6 +3,7 @@ import { useToastContext } from "../contexts/ToastProvider";
 import { useCompanyContext } from "../contexts/CompanyProvider";
 import { addOneRestday, deleteOneRestday, fetchRestdays } from "../services/restday.service";
 import { formatDateTime, formatDateToISO18601, normalizeHeader, parseExcelDateTime, parseExcelFile } from "../utility/upload.utility";
+import useDebounce from "./useDebounce";
 
 const formData = {
     employee_id: '',
@@ -38,6 +39,10 @@ const useRestday = () => {
     const [filters, setFilters] = useState({ ...filterFields });
 
 
+    const debouncedQuery_employee_id = useDebounce(filters.employee_id, 800);
+    const debouncedQuery_to = useDebounce(filters.to, 800);
+    const debouncedQuery_from = useDebounce(filters.from, 800);
+
     const { company } = useCompanyContext();
     const { addToast } = useToastContext();
 
@@ -46,9 +51,12 @@ const useRestday = () => {
         setIsRestdaysLoading(true);
 
         try {
-            const result = await fetchRestdays(company.company_id);
-            console.log('restday: ', result);
-
+            const result = await fetchRestdays(
+                company.company_id,
+                debouncedQuery_employee_id || null,
+                debouncedQuery_from || null,
+                debouncedQuery_to || null
+            );
             setRestdays(result.data.restdays);
         } catch (error) {
             console.log('restday error', error);
@@ -62,7 +70,7 @@ const useRestday = () => {
     useEffect(() => {
         if (!company) return;
         handleFetchRestdays();
-    }, [company]); // Added dependency array
+    }, [company, debouncedQuery_employee_id, debouncedQuery_to, debouncedQuery_from]); // Added dependency array
 
     const handleAddRow = () => {
         const newRow = { ...formData, id: Date.now() };

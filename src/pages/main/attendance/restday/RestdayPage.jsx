@@ -1,5 +1,6 @@
 import AddModal from "../../../../components/AddModal";
 import DailyRecordFilter from "../../../../components/DailyRecordFilter";
+import DualBallLoading from "../../../../components/DualBallLoading";
 import TanStackTable from "../../../../components/TanStackTable";
 import { useRestdayContext } from "../../../../contexts/RestdayProvider";
 import RestdayForm from "./RestdayForm";
@@ -18,6 +19,9 @@ const RestdayPage = () => {
         //filter
         filters,
         handleResetFilter, handleFilterChange,
+
+        //filter
+        isRestdaysLoading
     } = useRestdayContext();
 
     return (
@@ -32,12 +36,18 @@ const RestdayPage = () => {
                     />
                 </div>
                 <div className="w-full">
-                    <TanStackTable
-                        data={restdays}
-                        columns={column}
-                        onRowClick={handleRowClick}
-                        onDelete={handleDeleteOneRestday}
-                    />
+                    {
+                        isRestdaysLoading
+                            ? <DualBallLoading />
+                            : <TanStackTable
+                                data={restdays}
+                                columns={column}
+                                onRowClick={handleRowClick}
+                                onDelete={handleDeleteOneRestday}
+                            />
+                    }
+
+
                 </div>
             </div>
             {showRestdayModal && (

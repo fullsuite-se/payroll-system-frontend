@@ -1,5 +1,6 @@
 import AddModal from "../../../../components/AddModal";
 import DailyRecordFilter from "../../../../components/DailyRecordFilter";
+import DualBallLoading from "../../../../components/DualBallLoading";
 import TanStackTable from "../../../../components/TanStackTable";
 import { useLeaveContext } from "../../../../contexts/LeaveProvider";
 import LeaveForm from "./LeaveForm";
@@ -16,6 +17,7 @@ const LeavePage = () => {
         isUploading,
         filters,
         handleResetFilter, handleFilterChange,
+        isLeavesLoading,
     } = useLeaveContext();
 
     return (
@@ -30,12 +32,17 @@ const LeavePage = () => {
                     />
                 </div>
                 <div className="w-full">
-                    <TanStackTable
-                        data={leaves}
-                        columns={column}
-                        onRowClick={handleRowClick}
-                        onDelete={handleDeleteOneLeave}
-                    />
+                    {
+                        isLeavesLoading
+                            ? <DualBallLoading />
+                            : <TanStackTable
+                                data={leaves}
+                                columns={column}
+                                onRowClick={handleRowClick}
+                                onDelete={handleDeleteOneLeave}
+                            />
+                    }
+
                 </div>
             </div>
             {showLeaveModal && (
