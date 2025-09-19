@@ -32,3 +32,16 @@ export const updateCompany = async (company_id, formData) => {
 export const updateCompanyInfo = async (company_id, formData) => {
     return await payroll_api.patch(`/api/v1/companies/${company_id}/info`, formData);
 };
+
+
+
+
+
+export const fetchCompanyWorkingDays = async (company_id) => {
+    return await payroll_api.get(`/api/v1/companies/${company_id}/configuration/working-days`);
+}
+
+
+export const fetchCompanyPayrollFrequency = async (company_id) => {
+    return await payroll_api.get(`/api/v1/companies/${company_id}/configuration/payroll-frequency`);
+};

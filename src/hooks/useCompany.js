@@ -4,6 +4,8 @@ import {
     createCompanyPayrollFrequency,
     createCompanyWorkingDays,
     createUserToManageCompany,
+    fetchCompanyPayrollFrequency,
+    fetchCompanyWorkingDays,
     getCompaniesService,
     getCompanyFullDetail,
     updateCompany,
@@ -49,6 +51,11 @@ const useCompany = () => {
     const [isEditCompanyInfo, setIsEditCompanyInfo] = useState(false);
     const [isEditCompanyLoading, setIsEditCompanyLoading] = useState(false);
     const [isEditCompanyInfoLoading, setIsEditCompanyInfoLoading] = useState(false);
+
+    //configurations
+    const [workingDays, setWorkingDays] = useState();
+    const [payrollFrequency, setPayrollFrequency] = useState();
+
     const { addToast } = useToastContext();
 
     useEffect(() => {
@@ -104,6 +111,28 @@ const useCompany = () => {
                 business_type: company.business_type,
             });
         }
+    }, [company]);
+
+    const handleFetchCompanyPayrunConfigurations = async () => {
+        //fetch company configurations
+        try {
+            const result1 = await fetchCompanyWorkingDays(company.company_id);
+            console.log('working days: ', result1);
+            const result2 = await fetchCompanyPayrollFrequency(company.company_id);
+            console.log('payroll freq: ', result2);
+
+            setWorkingDays(result1.data.days.number_of_days);
+            setPayrollFrequency(result2.data.frequency.frequency);
+        } catch (error) {
+            console.log(error);
+            addToast("Failed to fetch company configurations", "error");
+        }
+    };
+
+    useEffect(() => {
+        if (!company) return;
+
+        handleFetchCompanyPayrunConfigurations();
     }, [company]);
 
     const handleFetchCompanyFullDetail = async (companyId) => {
@@ -292,7 +321,9 @@ const useCompany = () => {
         isEditCompanyInfoLoading, setIsEditCompanyInfoLoading,
         isEditCompanyLoading, setIsEditCompanyLoading,
         isEditCompanyModalOpen, setIsEditCompanyModalOpen,
-        companyFullDetail, isCompanyFullDetailLoading
+        companyFullDetail, isCompanyFullDetailLoading,
+        workingDays, setWorkingDays,
+        payrollFrequency, setPayrollFrequency,
     };
 };
 
