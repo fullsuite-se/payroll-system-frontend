@@ -10,7 +10,6 @@ import LeavePage from "./pages/main/attendance/leave/LeavePage"
 import OvertimePage from "./pages/main/attendance/overtime/OvertimePage"
 import RestdayPage from "./pages/main/attendance/restday/RestdayPage"
 import EmployeePage from "./pages/main/employee/EmployeePage"
-import CompanyPage from "./pages/main/company/CompanyPage"
 import { UserProvider } from "./contexts/UserProvider"
 import { CompanyProvider } from "./contexts/CompanyProvider"
 import { ToastProvider } from "./contexts/ToastProvider"
@@ -69,8 +68,6 @@ function App() {
                                       <Route path="/payrun/last" element={<LastPayrunPage />} />
 
                                       <Route path="/employee" element={<EmployeePage />} />
-
-                                      <Route path="/company" element={<CompanyPage />} />
 
                                       <Route path="/attendance" element={<AttendancePage />} />
                                       <Route path="/attendance/absence" element={<AbsencePage />} />

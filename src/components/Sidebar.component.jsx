@@ -42,10 +42,6 @@ const Sidebar = () => {
                 { label: "Holiday", path: "/attendance/holiday" },
             ],
         },
-        // {
-        //     title: null,
-        //     items: [{ label: "Company", path: "/company" }],
-        // },
         {
             title: "Configuration",
             items: [
@@ -60,7 +56,7 @@ const Sidebar = () => {
     return (
         <aside className="w-52 bg-white border-r border-gray-200 h-screen p-4 flex flex-col">
             <CompanySelection />
-            <nav className="flex flex-col pt-5 gap-4 text-sm">
+            <nav className="flex flex-col pt-2 gap-y-1.5 text-sm">
                 {sidebarSections.map((section, idx) => (
                     <div key={idx}>
                         {section.title && (
@@ -80,7 +76,7 @@ const Sidebar = () => {
                                     className={navItemClasses(item.path)}
                                 >
                                     {isActive(item.path) && (
-                                        <RocketLaunchIcon className="w-3.5 h-3.5 text-teal-600" />
+                                        <RocketLaunchIcon className="w-3.5 h-3.5 text-teal-600 text-sm" />
                                     )}
                                     {item.label}
                                 </Link>
