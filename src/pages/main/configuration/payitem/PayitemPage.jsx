@@ -1,8 +1,17 @@
+import Search from "../../../../components/Search";
+import { usePayitemContext } from "../../../../contexts/PayitemProvider";
+import PayitemTable from "./PayitemTable";
+
 const PayitemPage = () => {
+    const { query, setQuery, } = usePayitemContext();
+
     return (
-        <div>
-            this is payitem page
-        </div>
+        <>
+            <div className="flex pb-4">
+                <Search query={query} setQuery={setQuery} />
+            </div>
+            <PayitemTable />
+        </>
     )
 };
 
