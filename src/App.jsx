@@ -23,7 +23,6 @@ import { AbsenceProvider } from "./contexts/AbsenceProvider"
 import { RestdayProvider } from "./contexts/RestdayProvider"
 import HolidayPage from "./pages/main/attendance/holiday/HolidayPage"
 import { HolidayProvider } from "./contexts/HolidayProvider"
-import SpecialPayrunPage from "./pages/main/payrun/special/SpecialPayrunPage"
 import RegularPayrunPage from "./pages/main/payrun/Regular/RegularPayrunPage"
 import { PayitemProvider } from "./contexts/PayitemProvider"
 import { RegularPayrunProvider } from "./contexts/RegularPayrunProvider"
@@ -32,6 +31,7 @@ import PayitemPage from "./pages/main/configuration/payitem/PayitemPage"
 import CompanyConfigsPage from "./pages/main/configuration/company-configs/CompanyConfigsPage"
 import RecurringPayPage from "./pages/main/configuration/recurring-pay/RecurringPayPage"
 import LastPayrunPage from "./pages/main/payrun/last/LastPayrunPage"
+import SpecialPayrunPage from "./pages/main/payrun/special/SpecialPayrunPage"
 
 function App() {
   return (
