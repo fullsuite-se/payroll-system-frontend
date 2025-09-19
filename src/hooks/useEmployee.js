@@ -85,6 +85,7 @@ const useEmployee = () => {
     const [showAddSalaryForm, setShowAddSalaryForm] = useState(false);
     const [isAddSalaryLoading, setIsAddSalaryLoading] = useState(false);
     const [isAddEmployeeLoading, setIsAddEmployeeLoading] = useState(false);
+    const [activeEmployees, setActiveEmployees] = useState([]);
 
     const { addToast } = useToastContext();
     const debouncedQuery = useDebounce(query, 800);
@@ -118,6 +119,12 @@ const useEmployee = () => {
 
         if (company) fetchEmployees();
     }, [company, debouncedQuery]);
+
+    useEffect(() => {
+        if (!employees) return;
+
+        setActiveEmployees(employees.filter(e => e.employement_status));
+    }, [employees]);
 
     const handleReloadEmployees = async () => {
         try {
@@ -503,6 +510,9 @@ const useEmployee = () => {
         employeesFormData, setEmployeesFormData,
         isUploading,
 
+        //for payrun
+        activeEmployees, setActiveEmployees,
+
         // Form manipulation functions
         handleAddRow,
         handleRemoveRow,
@@ -518,6 +528,8 @@ const useEmployee = () => {
         handleAddSalary,
         isAddSalaryLoading, setIsAddSalaryLoading,
         handleChangeEmploymentStatus
+
+
     };
 };
 

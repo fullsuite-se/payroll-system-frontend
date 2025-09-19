@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import { usePayitemContext } from "../contexts/PayitemProvider";
+import { useEmployeeContext } from "../contexts/EmployeeProvider";
+import { useToastContext } from "../contexts/ToastProvider";
+import { validateDailyRecordOfOneEmployee } from "../services/attendance.service";
+import { convertToISO8601 } from "../utility/datetime.utility";
 
 const formData = {
     date_from: '',
@@ -13,7 +17,11 @@ const formData = {
 
 const useRegularPayrun = () => {
     const [options, setOptions] = useState({ ...formData });
+    const [isValidating, setIsValidating] = useState(false);
+
     const { payitems } = usePayitemContext();
+    const { activeEmployees } = useEmployeeContext();
+    const { addToast } = useToastContext();
 
     useEffect(() => {
         console.log("running regular payrun hook");
@@ -60,12 +68,53 @@ const useRegularPayrun = () => {
         }));
     };
 
+    const validateEmployeesDailyRecordAgainstPayrunPeriod = async () => {
+        setIsValidating(true);
+        for (const employee of activeEmployees) {
+            try {
+                const result = await validateDailyRecordOfOneEmployee(
+                    employee.employee_id,
+                    convertToISO8601(options.date_from),
+                    convertToISO8601(options.date_to)
+                );
+
+                if (!result.data.valid) {
+                    addToast(`Employee ${employee.employee_id}'s doesn't match number of valid payrun days`, "error");
+                    setIsValidating(false);
+                    return false;
+                }
+            } catch (error) {
+                console.log(error);
+                addToast(`Error occured in validating employee's daily record: ${employee.employee_id}`, "error");
+            }
+        }
+        setIsValidating(false);
+        return true;
+    };
+
+    const handleGenerate = async () => {
+        const allValid = await validateEmployeesDailyRecordAgainstPayrunPeriod();
+        if (!allValid) {
+            addToast("Fix the daily record first", "warning");
+            return;
+        }
+
+        //...
+        alert("All are valid");
+
+    };
+
 
 
     return {
         options, setOptions,
         //options controll
         handleInputChange, handlePayitemChange, removePayitem,
+
+        handleGenerate,
+
+        //validate
+        isValidating, setIsValidating,
     };
 };
 

@@ -4,7 +4,7 @@ import { useRegularPayrunContext } from "../../../../contexts/RegularPayrunProvi
 
 const PayrunOption = () => {
     const { payitems } = usePayitemContext();
-    const { options, handleInputChange, handlePayitemChange, removePayitem } = useRegularPayrunContext();
+    const { options, handleInputChange, handlePayitemChange, removePayitem, handleGenerate, isValidating } = useRegularPayrunContext();
 
 
     return (
@@ -120,9 +120,10 @@ const PayrunOption = () => {
             {/* Draft Button */}
             <div className="flex justify-end">
                 <button
+                    onClick={handleGenerate}
                     className="inline-flex items-center px-8 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm rounded-3xl "
                 >
-                    Draft
+                    {isValidating ? "Loading ..." : "Generate"}
                 </button>
             </div>
         </div>
