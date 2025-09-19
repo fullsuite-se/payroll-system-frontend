@@ -42,15 +42,23 @@ const Sidebar = () => {
                 { label: "Holiday", path: "/attendance/holiday" },
             ],
         },
+        // {
+        //     title: null,
+        //     items: [{ label: "Company", path: "/company" }],
+        // },
         {
-            title: null,
-            items: [{ label: "Company", path: "/company" }],
+            title: "Configuration",
+            items: [
+                { label: "Payitems", path: "/configuration/payitem" },
+                { label: "Recurring Pay", path: "/configuration/recurring-pay" },
+                { label: "Comp. Config.", path: "/configuration/company-configuration" },
+            ],
         },
+
     ];
 
     return (
         <aside className="w-52 bg-white border-r border-gray-200 h-screen p-4 flex flex-col">
-            {/* <h2 className="text-lg font-bold text-gray-800 mb-6">Payroll</h2> */}
             <CompanySelection />
             <nav className="flex flex-col pt-5 gap-4 text-sm">
                 {sidebarSections.map((section, idx) => (

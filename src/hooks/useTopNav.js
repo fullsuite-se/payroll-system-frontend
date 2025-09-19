@@ -24,7 +24,10 @@ const useTopNav = () => {
         "/attendance/restday": "Restday",
         "/attendance/holiday": "Holiday",
         "/company": "Company",
-    }
+        "/configuration/payitem": "Payitem",
+        "/configuration/company-configuration": "Company Configuration",
+        "/configuration/recurring-pay": "Recurring Pay",
+    };
 
     return {
         dropdownOpen, setDropdownOpen,
